@@ -1,0 +1,12 @@
+.well.card{
+  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  right: 15px;
+  margin-top: -185px;
+}
+input, button.btn{
+    margin: 10px 0;
+    
+}
