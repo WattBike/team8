@@ -2,7 +2,13 @@
 define('safeGuard', TRUE);
 ?>
 <?php require_once "assets/include/connect.php"; ?>
-<?php include "assets/include/header.php"; ?>
+<?php require_once "assets/include/header.php"; ?>
+<?php if(!dbConnected):?>
+    <div class="alert">
+        No connection to the database available.
+        <?php echo mysqli_connect_error()?>
+    </div>
+<?php endif;?>
         <div class="well card">
             <img id="profile-img" class="img-circle img-responsive center-block" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" width="96"/>
             <form class="form-signin">
@@ -20,4 +26,4 @@ define('safeGuard', TRUE);
                 Forgot the password?
             </a>
         </div><!-- /card-container -->
-<?php include "assets/include/footer.php"; ?>
+<?php require_once "assets/include/footer.php"; ?>

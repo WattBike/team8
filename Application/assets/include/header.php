@@ -1,7 +1,9 @@
 <?php
 if(!defined('safeGuard')) {
    die('Direct access not permitted');
-}?>
+}
+require_once "functions.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
