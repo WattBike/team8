@@ -1,3 +1,7 @@
+<?php
+if(!defined('safeGuard')) {
+   die('Direct access not permitted');
+}?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

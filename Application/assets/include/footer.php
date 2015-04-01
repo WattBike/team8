@@ -1,4 +1,8 @@
-    </div><!-- /container -->
+<?php
+if(!defined('safeGuard')) {
+   die('Direct access not permitted');
+}?>
+</div><!-- /container -->
     
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

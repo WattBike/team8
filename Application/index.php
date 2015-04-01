@@ -1,3 +1,6 @@
+<?php
+define('safeGuard', TRUE);
+?>
 <?php require_once "assets/include/connect.php"; ?>
 <?php include "assets/include/header.php"; ?>
         <div class="well card">
