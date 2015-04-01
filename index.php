@@ -1,4 +1,5 @@
-<?php include "assets/php/header.php"; ?>
+<?php require_once "assets/include/connect.php"; ?>
+<?php include "assets/include/header.php"; ?>
         <div class="well card">
             <img id="profile-img" class="img-circle img-responsive center-block" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" width="96"/>
             <form class="form-signin">
@@ -16,4 +17,4 @@
                 Forgot the password?
             </a>
         </div><!-- /card-container -->
-<?php include "assets/php/footer.php"; ?>
+<?php include "assets/include/footer.php"; ?>
