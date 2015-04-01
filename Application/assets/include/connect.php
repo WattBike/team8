@@ -4,6 +4,7 @@ if(!defined('safeGuard')) {
 }
     require_once "database.php";
 
-    $mysqliConnection = mysqli_connect($mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase);
-    define('dbConnected', !mysqli_connect_errno($mysqliConnection));
+    $mysqli = mysqli_connect($mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase);
+    $mysqli->set_charset("utf8");
+    define('dbConnected', !mysqli_connect_errno($mysqli));
 ?>
