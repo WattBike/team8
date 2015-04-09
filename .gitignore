@@ -1,6 +1,3 @@
-
 .brackets.json
-
 */database.php
-
-Application/assets/include/database.php
+/Application/assets/include/config.php
