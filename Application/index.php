@@ -15,7 +15,7 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
 else:
 ?>
 <div class="well card">
-  <img id="profile-img" class="img-circle img-responsive center-block" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" width="96"/>
+  <img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
   <form class="form-signin" method="post">
     <span id="reauth-email" class="reauth-email"></span>
     <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
