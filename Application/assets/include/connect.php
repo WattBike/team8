@@ -2,7 +2,7 @@
 if (!defined('safeGuard')) {
     die('Direct access not permitted');
 }
-function login_check($mail, $pass)
+function verified_login($mail, $pass)
 {
     global $mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase;
     require_once(__ROOT__ . '/assets/include/functions.php');
@@ -15,7 +15,6 @@ function login_check($mail, $pass)
     if (!($stmt = $mysqli->prepare("SELECT email_id, password FROM register_tabel WHERE email_id=? AND password =?"))) {
         echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
-
     if (!$stmt->bind_param('ss', $mail, $pass)) {
         echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
     }

@@ -4,27 +4,15 @@ define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
-if (!dbConnected):
-?>
-  <div class="alert">
-    No connection to the database available.
-    <?php
-    echo mysqli_connect_error();
-    echo $mysqli->error;
-?>
-  </div>
-<?php
-else:
-    if (isset($_POST['email']) && ($_POST['email'] != "")) {
-        if (!login_check($_POST['email'], $_POST['password'])) {
-            echo "Login Failed";
-            //header('Location: /index.php', 401);
-        } else {
-            echo "Login Succeeded!";
-            //header('Location: /index.php', 200);
-        }
+if (isset($_POST['email']) && ($_POST['email'] != "")):
+    if (!verified_login($_POST['email'], $_POST['password'])) {
+        echo "Login Failed";
+        //header('Location: /index.php', 401);
+    } else {
+        echo "Login Succeeded!";
+        //header('Location: /index.php', 200);
     }
-endif;
+else:
 ?>
 <div class="well card">
   <img id="profile-img" class="img-circle img-responsive center-block" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" width="96"/>
@@ -44,5 +32,6 @@ endif;
   </a>
 </div><!-- /card-container -->
 <?php
+endif;
 require_once "assets/include/footer.php";
 ?>
