@@ -4,10 +4,10 @@ if (!defined('safeGuard')) {
 }
 function login_check($mail, $pass)
 {
-    global $username, $password, $host, $database;
+    global $mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase;
     require_once(__ROOT__ . '/assets/include/functions.php');
     require_once(__ROOT__ . '/assets/include/config.php');
-    $mysqli = new mysqli($host, $username, $password, $database);
+    $mysqli = new mysqli($mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase);
     $mysqli->set_charset("utf8");
     $mail = $mysqli->real_escape_string($mail);
     $pass = $mysqli->real_escape_string($pass);
