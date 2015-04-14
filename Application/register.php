@@ -5,12 +5,23 @@ define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
-    if (!verified_login($_POST['email'], $_POST['password'])) {
+    $registration = register_user(
+        $_POST['email'],
+        $_POST['password'],
+        $_POST['verificationPassword'],
+        $_POST['firstname'],
+        $_POST['lastname'],
+        $_POST['age'],
+        $_POST['gender'],
+        $_POST['length'],
+        $_POST['weight']
+    );
+    if (!$registration["success"]) {
         echo "Registration Failed";
     } else {
         echo "Registration Succeeded!";
     }
-header('Location: /index.php');
+    echo $registration["statuscode"];
 else:
 ?>
 <div class="well card">
@@ -19,6 +30,7 @@ else:
     <span id="reauth-email" class="reauth-email"></span>
     <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
     <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+    <input type="password" id="inputVerificationPassword" name="verificationPassword" class="form-control" placeholder="Password" required>
     <input type="text" id="inputFirstname" name="firstname" class="form-control" placeholder="First Name">
     <input type="text" id="inputLastname" name="lastname" class="form-control" placeholder="Last Name">
     <input type="number" min="1" id="inputAge" name="age" class="form-control" placeholder="Age">

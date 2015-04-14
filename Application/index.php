@@ -6,11 +6,9 @@ require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
     if (!verified_login($_POST['email'], $_POST['password'])) {
-        echo "Login Failed";
-        //header('Location: /index.php', 401);
+        header('Location: /team8/Application/index.php', 401);
     } else {
-        echo "Login Succeeded!";
-        //header('Location: /index.php', 200);
+        header('Location: /team8/Application/display.php', 200);
     }
 else:
 ?>
