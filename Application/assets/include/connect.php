@@ -31,7 +31,8 @@ function verified_login($mail, $pass)
     }
     $logged_in = ($res->num_rows == 1);
     $_SESSION['mail'] = $mail;
-    $_SESSION['first_name'] = $res->fetch_all()[0][2];
+    $result = $res->fetch_all();
+    $_SESSION['first_name'] = $result[0][2];
     return $logged_in;
 }
 
