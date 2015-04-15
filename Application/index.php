@@ -6,9 +6,15 @@ require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/config.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
     if (!verified_login($_POST['email'], $_POST['password'])) {
+<<<<<<< Updated upstream
         header("Location: $base_url/index.php", 401);
     } else {
         header("Location: $base_url/display.php", 200);
+=======
+        header('Location: index.php', 401);
+    } else {
+        header('Location: display.php', 200);
+>>>>>>> Stashed changes
     }
 else:
 require_once(__ROOT__ . '/assets/include/header.php');
