@@ -3,19 +3,17 @@ define('safeGuard', TRUE);
 define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
-require_once(__ROOT__ . '/assets/include/header.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
     if (!verified_login($_POST['email'], $_POST['password'])) {
-        echo "Login Failed";
-        //header('Location: /index.php', 401);
+        header('Location: /team8/Application/index.php', 401);
     } else {
-        echo "Login Succeeded!";
-        //header('Location: /index.php', 200);
+        header('Location: /team8/Application/display.php', 200);
     }
 else:
+require_once(__ROOT__ . '/assets/include/header.php');
 ?>
 <div class="well card">
-  <img id="profile-img" class="img-circle img-responsive center-block" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" width="96"/>
+  <img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
   <form class="form-signin" method="post">
     <span id="reauth-email" class="reauth-email"></span>
     <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
@@ -25,7 +23,10 @@ else:
         <input type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Sign in</button>
+    <a href="register.php" class="btn btn-default btn-lg btn-block pull-right">
+    Sign up
+    </a>
   </form><!-- /form -->
   <a href="#" class="forgot-password">
     Forgot the password?
