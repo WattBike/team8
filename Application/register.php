@@ -17,9 +17,9 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
         $_POST['weight']
     );
     if (!$registration["success"]) {
-        echo "Registration Failed";
+        echo "Registration Failed <a href='register.php'>back</a>";
     } else {
-        echo "Registration Succeeded!";
+        echo "Registration Succeeded! <a href='display.php'>continue</a>";
     }
     echo $registration["statuscode"];
 else:

@@ -3,7 +3,6 @@ define('safeGuard', TRUE);
 define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
-require_once(__ROOT__ . '/assets/include/header.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
     if (!verified_login($_POST['email'], $_POST['password'])) {
         header('Location: /team8/Application/index.php', 401);
@@ -11,6 +10,7 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
         header('Location: /team8/Application/display.php', 200);
     }
 else:
+require_once(__ROOT__ . '/assets/include/header.php');
 ?>
 <div class="well card">
   <img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
