@@ -1,13 +1,14 @@
 <?php
 define('safeGuard', TRUE);
-define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
+global $base_url;
 require_once(__ROOT__ . '/assets/include/connect.php');
+require_once(__ROOT__ . '/assets/include/config.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
     if (!verified_login($_POST['email'], $_POST['password'])) {
-        header('Location: /team8/Application/index.php', 401);
+        header("Location: $base_url/index.php", 401);
     } else {
-        header('Location: /team8/Application/display.php', 200);
+        header("Location: $base_url/display.php", 200);
     }
 else:
 require_once(__ROOT__ . '/assets/include/header.php');
