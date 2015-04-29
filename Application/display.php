@@ -12,7 +12,7 @@ else:
 ?>
 <div class="container">
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
-    <a class="btn btn-success" href="session.php">Start new training session</a>
+    <a class="btn btn-success" href="session.php">Open training session</a>
     <br>
     <a class="btn btn-warning" href="index.php">Logout</a>
 </div><!-- /card-container -->

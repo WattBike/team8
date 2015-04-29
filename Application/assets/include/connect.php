@@ -37,6 +37,7 @@ function verified_login($mail, $pass)
     }else{
         session_destroy();
     }
+    $res->close();
     return $logged_in;
 }
 
@@ -66,5 +67,28 @@ function register_user($mail, $pass, $verification_pass, $first_name, $last_name
         $_SESSION['first_name'] = $first_name;
     }
     return $status;
+}
+
+function get_user_session($id = -1){
+    $mysqli   = connect();
+    $resultset= array();
+ 	$mail     = $mysqli->real_escape_string($_SESSION['mail']);
+    $member_res = $mysqli->query("SELECT `member_id` FROM `Member` WHERE `email_id`='$mail'");
+    if($member_res){
+        $row       = $member_res->fetch_assoc();
+        $member_id = $row['member_id'];
+        if($id>-1){
+            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' AND `session_nr`='$id' ORDER BY time";
+        }else{
+            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY time";
+        }
+        $results   = $mysqli->query($sql);
+        for($i; $i<$results->num_rows;$i++){
+            array_push($resultset, $results->fetch_array());
+        }
+        $results->close();
+    }
+    $member_res->close();
+    return $resultset;
 }
 ?>
