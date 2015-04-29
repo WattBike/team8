@@ -36,14 +36,15 @@
 	    </tbody>
 	</table>
 </div><!-- /card-container -->
+<?php require_once "assets/include/footer.php";?>
 <script>
-
         jQuery(document).ready(function () {
             refresh();
             function refresh(){
                 jQuery.ajax({
                     url: "<?php echo $base_url;?>/list.php",
-                    context: document.body
+                    context: document.body,
+                    dataType: "json"
                 }).done(function (data) {
                     jQuery('tbody').html('');
                     for (var i = 0; i < data.length; i++) {
@@ -51,21 +52,15 @@
                         jQuery('tbody').html(
                             oldData
                             + "<tr>"
-                            + "<td><input type=\"checkbox\" name=\"" + data[i] + "\" value=\"" + data[i] + "\"/></td>"
-                            + "<td>" + data[i] + "</td>"
-                            + "<td>" + data[i] + "</td>"
-                            + "<td>" + data[i] + "</td>"
-                            + "<td>" + data[i] + "</td>"
+                            + "<td>" + data[i].session_nr + "</td>"
+                            + "<td>" + data[i].bpm + "</td>"
+                            + "<td>" + data[i].time + "</td>"
                             + "</tr>"
                         );
                     }
                 });
-                setTimeout(refresh, 5000);
+                setTimeout(refresh, 900000);
             }
         });
-
 </script>
-<?php
-endif;
-require_once "assets/include/footer.php";
-?>
+<?php endif;?>
