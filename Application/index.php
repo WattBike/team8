@@ -14,7 +14,7 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
 else:
 require_once(__ROOT__ . '/assets/include/header.php');
 ?>
-<div class="well card">
+<div>
   <img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
   <form class="form-signin" method="post">
     <span id="reauth-email" class="reauth-email"></span>
