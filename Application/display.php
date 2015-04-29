@@ -10,9 +10,9 @@ else:
 ?>
 <div class="container">
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
-    <button><a href="session.php">Start new training session</a></button>
-    
-    <a href="index.php">Logout</a>
+    <a class="btn btn-success" href="session.php">Start new training session</a>
+    <br>
+    <a class="btn btn-warning" href="index.php">Logout</a>
 </div><!-- /card-container -->
 <?php
 endif;

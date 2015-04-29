@@ -15,6 +15,8 @@
 <div class="container">
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
     <h2>A new session is started</h2>
+    <a class="btn btn-primary" href="display.php">Back</a>
+    <a class="btn btn-warning" href="index.php">Logout</a>
 	<table class="table">
 		<thead>
 		    <tr>
@@ -26,7 +28,6 @@
 	    <?php
 	    	$member_id=$_SESSION['member_id'];
 	    	$sql="SELECT * FROM Heartrate WHERE member_id='$member_id'ORDER BY time";
-	        // $query 	= 	"SELECT * FROM member ORDER BY  DESC";
 	      	$results=mysqli_query($mysqli,$sql);
 	        $num_rows = mysqli_num_rows($results);
 	        while($row = mysqli_fetch_assoc($results)){
@@ -36,13 +37,12 @@
 		            <td id="firstColum"><?php echo date('h:i:s');?></td>
 		        </tr>
 	   	<?php
-	   		sleep(5);
 	        }
 	    ?>
 	    </tbody>
 	</table>
-    <a href="index.php">Logout</a>
-    <a href="display.php">Back</a>
+    
+    
 </div><!-- /card-container -->
 <?php
 endif;

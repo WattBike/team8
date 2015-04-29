@@ -47,7 +47,7 @@ function register_user($mail, $pass, $verification_pass, $first_name, $last_name
         $status["statuscode"]="Passwords do not match";
     }else{
         $pass = hash_pass($mail, $pass);
-        if (!($stmt = $mysqli->prepare("INSERT INTO `member` (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"))) {
+        if (!($stmt = $mysqli->prepare("INSERT INTO `Member` (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"))) {
             echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
         if (!$stmt->bind_param('ssssisdd', $mail, $pass, $first_name, $last_name, $age, $gender, $lenghth, $weight)) {
