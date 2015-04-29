@@ -17,7 +17,7 @@ function verified_login($mail, $pass)
     $mail = $mysqli->real_escape_string($mail);
     $pass = $mysqli->real_escape_string($pass);
     $pass = hash_pass($mail, $pass);
-    if (!($stmt = $mysqli->prepare("SELECT email_id, password, firstname FROM register_tabel WHERE email_id=? AND password =?"))) {
+    if (!($stmt = $mysqli->prepare("SELECT email_id, password, firstname FROM member WHERE email_id=? AND password =?"))) {
         echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
     if (!$stmt->bind_param('ss', $mail, $pass)) {
@@ -46,7 +46,7 @@ function register_user($mail, $pass, $verification_pass, $first_name, $last_name
         $status["statuscode"]="Passwords do not match";
     }else{
         $pass = hash_pass($mail, $pass);
-        if (!($stmt = $mysqli->prepare("INSERT INTO `register_tabel` (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"))) {
+        if (!($stmt = $mysqli->prepare("INSERT INTO `member` (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"))) {
             echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
         if (!$stmt->bind_param('ssssisdd', $mail, $pass, $first_name, $last_name, $age, $gender, $lenghth, $weight)) {

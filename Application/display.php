@@ -5,7 +5,7 @@ define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
 if (!isset($_SESSION['mail']) && ($_SESSION['mail'] == "")):
-    header('Location: /team8/Application/index.php', 401);
+    header("Location: ".$base_url."/index.php", 401);
 else:
 ?>
 <div class="container">
