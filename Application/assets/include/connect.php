@@ -17,7 +17,7 @@ function verified_login($mail, $pass)
     $mail = $mysqli->real_escape_string($mail);
     $pass = $mysqli->real_escape_string($pass);
     $pass = hash_pass($mail, $pass);
-    if (!($stmt = $mysqli->prepare("SELECT email_id, password, firstname FROM member WHERE email_id=? AND password =?"))) {
+    if (!($stmt = $mysqli->prepare("SELECT email_id, password, firstname, member_id FROM Member WHERE email_id=? AND password =?"))) {
         echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
     }
     if (!$stmt->bind_param('ss', $mail, $pass)) {
@@ -33,6 +33,7 @@ function verified_login($mail, $pass)
     $_SESSION['mail'] = $mail;
     $result = $res->fetch_all();
     $_SESSION['first_name'] = $result[0][2];
+    $_SESSION['member_id'] = $result[0][3];
     return $logged_in;
 }
 
