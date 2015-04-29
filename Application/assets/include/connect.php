@@ -83,7 +83,7 @@ function get_user_session($id = -1){
             $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY time";
         }
         $results   = $mysqli->query($sql);
-        for($i; $i<$results->num_rows;$i++){
+        for($i=0; $i<$results->num_rows;$i++){
             array_push($resultset, $results->fetch_array());
         }
         $results->close();

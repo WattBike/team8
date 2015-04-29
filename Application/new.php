@@ -12,11 +12,14 @@
 ?>
 <div class="container">
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
-    <a class="btn btn-success" href="session.php">Open last training session</a>
-    <br>
-    <a class="btn btn-default" href="new.php">Start new training</a>
+    <h2>Your training</h2>
+    <a class="btn btn-primary" href="display.php">Back</a>
     <a class="btn btn-warning" href="index.php">Logout</a>
-</div><!-- /card-container -->
+    <br><br>
+    <a class="btn btn-success">Start</a>
+    <a class="btn btn-danger">Stop</a>
+</div>
+
 <?php
 endif;
 require_once "assets/include/footer.php";
