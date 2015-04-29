@@ -14,13 +14,16 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
 else:
 require_once(__ROOT__ . '/assets/include/header.php');
 ?>
-<div>
-  <img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
+<div class="col-md-12 well">
   <form class="form-signin" method="post">
-    <span id="reauth-email" class="reauth-email"></span>
-    <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
-    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-    <div id="remember" class="checkbox">
+    <img class="img-circle img-responsive center-block form-group" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
+    <div class="form-group">
+      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+    </div>
+    <div class="form-group">
+      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+    </div>
+    <div class="form-group checkbox">
       <label>
         <input type="checkbox" value="remember-me"> Remember me
       </label>

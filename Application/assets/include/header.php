@@ -24,4 +24,4 @@ require_once(__ROOT__ . '/assets/include/functions.php');
     <![endif]-->
 </head>
 <body>
-    <div class="container col-md-12">
+    <div class="container">
