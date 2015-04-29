@@ -1,7 +1,8 @@
 <?php
-define('safeGuard', TRUE);
-define('__ROOT__', dirname(__FILE__));
 global $base_url;
+define('safeGuard', TRUE);
+define('dbConnected', TRUE);
+define('__ROOT__', dirname(__FILE__));
 require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/config.php');
 if (isset($_POST['email']) && ($_POST['email'] != "")):
