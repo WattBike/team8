@@ -3,6 +3,7 @@ if (!defined('safeGuard')) {
     die('Direct access not permitted');
 }
 session_start();
+date_default_timezone_set('UTC');
 function connect(){
     global $mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase;
     require_once(__ROOT__ . '/assets/include/functions.php');
@@ -69,7 +70,7 @@ function register_user($mail, $pass, $verification_pass, $first_name, $last_name
     return $status;
 }
 
-function get_user_session($id = -1){
+function get_user_session($id = -1, $time = "2015-01-01 00:00:00"){
     $mysqli   = connect();
     $resultset= array();
  	$mail     = $mysqli->real_escape_string($_SESSION['mail']);
@@ -77,7 +78,9 @@ function get_user_session($id = -1){
     if($member_res){
         $row       = $member_res->fetch_assoc();
         $member_id = $row['member_id'];
-        if($id>-1){
+        if($id>-1 && $time!=date( 'Y-m-d H:i:s')){
+            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' AND `session_nr`='$id' AND `time`>'$time' ORDER BY time";
+        }elseif($id>-1){
             $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' AND `session_nr`='$id' ORDER BY time";
         }else{
             $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY time";

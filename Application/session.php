@@ -36,7 +36,31 @@
 	    </tbody>
 	</table>
 </div><!-- /card-container -->
-<?php
-endif;
-require_once "assets/include/footer.php";
-?>
+<?php require_once "assets/include/footer.php";?>
+<script>
+        jQuery(document).ready(function () {
+            refresh();
+            function refresh(){
+                jQuery.ajax({
+                    url: "<?php echo $base_url;?>/list.php",
+                    context: document.body,
+                    dataType: "json"
+                }).done(function (data) {
+                    jQuery('tbody').html('');
+                    for (var i = 0; i < data.length; i++) {
+                        var oldData = jQuery('tbody').html();
+                        jQuery('tbody').html(
+                            oldData
+                            + "<tr>"
+                            + "<td>" + data[i].session_nr + "</td>"
+                            + "<td>" + data[i].bpm + "</td>"
+                            + "<td>" + data[i].time + "</td>"
+                            + "</tr>"
+                        );
+                    }
+                });
+                setTimeout(refresh, 900000);
+            }
+        });
+</script>
+<?php endif;?>
