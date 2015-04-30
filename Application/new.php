@@ -11,7 +11,7 @@
     else:
 ?>
 <div class="container">
-    <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
+    <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name']; ?></small></h1>
     <h2>Your training</h2>
     <a class="btn btn-primary" href="display.php">Back</a>
     <a class="btn btn-warning" href="index.php">Logout</a>
