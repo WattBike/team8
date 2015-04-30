@@ -92,4 +92,15 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 	$member_res -> close();
 	return $resultset;
 }
+
+function write_heartbeat($heartbeat){
+	if(	property_exists($heartbeat, "BPM")&&
+		property_exists($heartbeat, "Time")&&
+		property_exists($heartbeat, "UUID")){
+		$obj->status = "success";
+	}else{
+		$obj->status = "failure";
+	}
+	return $obj;
+}
 ?>

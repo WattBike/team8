@@ -6,10 +6,11 @@ $res = array();
 if (isset($_GET['time'])) {
 	$res = get_user_session(-1, $_GET['time']);
 } elseif (isset($_GET['bpm'])) {
-	$res = new stdClass();
-	$res -> BPM = $_GET['bpm'];
-	$res -> Time = date('Y-m-d H:i:s');
-	$res -> UUID = $_GET['UUID'];
+	$obj = new stdClass();
+	$obj -> BPM = $_GET['bpm'];
+	$obj -> Time = date('Y-m-d H:i:s');
+	$obj -> UUID = $_GET['UUID'];
+	$res = write_heartbeat($obj);
 } else {
 	$res = get_user_session(-1);
 }
