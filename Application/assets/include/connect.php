@@ -93,25 +93,76 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 	return $resultset;
 }
 
-function write_heartbeat($heartbeat){
-	if(	property_exists($heartbeat, "BPM")&&
-		property_exists($heartbeat, "Time")&&
-		property_exists($heartbeat, "UUID")){
-		$mysqli = connect();
-		if (!($stmt = $mysqli -> prepare("INSERT INTO `Member_devices` (`member_id`, `UUID`) VALUES ('0', ?);"))) {
-			echo "Prepare failed: (" . $mysqli -> errno . ") " . $mysqli -> error;
+function register_device($mail, $pass, $UUID) {
+	$mysqli = connect();
+	$mail = $mysqli -> real_escape_string($mail);
+	$pass = $mysqli -> real_escape_string($pass);
+	$pass = hash_pass($mail, $pass);
+	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
+		$obj -> status = "Login failed to register";
+	}
+	if (!$stmt -> bind_param('ss', $mail, $pass)) {
+		$obj -> status = "Login failed to register";
+	}
+	if (!$stmt -> execute()) {
+		$obj -> status = "Login failed to register";
+	}
+	if (!($res = $stmt -> get_result())) {
+		$obj -> status = "Login failed to register";
+	}
+	$logged_in = ($res -> num_rows == 1);
+	if ($logged_in) {
+		$result = $res -> fetch_all();
+		$member_id = $result[0][1];
+		if (!($stmt = $mysqli -> prepare("INSERT INTO `Member_devices` (`member_id`, `UUID`) VALUES (?, ?);"))) {
+			$obj -> status = "Login failed to register";
 		}
-		if (!$stmt -> bind_param('s', $heartbeat->UUID)) {
-			echo "Execute failed: (" . $stmt -> errno . ") " . $stmt -> error;
+		if (!$stmt -> bind_param('is', $member_id, $UUID)) {
+			$obj -> status = "Login failed to register";
 		}
 		if (!$stmt -> execute()) {
-			echo "Execute failed: (" . $stmt -> errno . ") " . $stmt -> error;
-			$obj->status = "Registration failed, please try again later";
-		}else{
-			$obj->status = "success";
+			$obj -> status = "Login failed to register";
+		} else {
+			$obj -> status = "Login Success";
 		}
-	}else{
-		$obj->status = "failure";
+	}
+}
+
+function write_heartbeat($heartbeat) {
+	if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "Time") && property_exists($heartbeat, "UUID")) {
+		$mysqli = connect();
+		if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;"))) {
+			$obj -> status = "Logging heartbeat failed, please try again later";
+		}
+		if (!$stmt -> bind_param('s', $heartbeat -> UUID)) {
+			$obj -> status = "Logging heartbeat failed, please try again later";
+		}
+		if (!$stmt -> execute()) {
+			$obj -> status = "Logging heartbeat failed, please try again later";
+		}
+		if (!($res = $stmt -> get_result())) {
+			$obj -> status = "Logging heartbeat failed, please try again later";
+		} else {
+			$logged_in = ($res -> num_rows == 1);
+			if ($logged_in) {
+				$result = $res -> fetch_all();
+				$member_id = $result[0][0];
+				if (!($stmt = $mysqli -> prepare("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES ('?', CURRENT_TIMESTAMP, '?', '?');"))) {
+					$obj -> status = "Heartbeat failed to register";
+				}
+				$temp_session = 0;
+				if (!$stmt -> bind_param('iii', $heartbeat -> BPM, $temp_session, $member_id)) {
+					$obj -> status = "Heartbeat failed to register";
+				}
+				if (!$stmt -> execute()) {
+					$obj -> status = "Heartbeat failed to register";
+				} else {
+					$obj -> status = "Heartbeat Success";
+				}
+			}
+		}
+	} else {
+		$obj -> status = "failure";
 	}
 	return $obj;
 }
