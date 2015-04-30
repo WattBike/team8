@@ -97,7 +97,19 @@ function write_heartbeat($heartbeat){
 	if(	property_exists($heartbeat, "BPM")&&
 		property_exists($heartbeat, "Time")&&
 		property_exists($heartbeat, "UUID")){
-		$obj->status = "success";
+		$mysqli = connect();
+		if (!($stmt = $mysqli -> prepare("INSERT INTO `Member_devices` (`member_id`, `UUID`) VALUES ('0', ?);"))) {
+			echo "Prepare failed: (" . $mysqli -> errno . ") " . $mysqli -> error;
+		}
+		if (!$stmt -> bind_param('s', $heartbeat->UUID)) {
+			echo "Execute failed: (" . $stmt -> errno . ") " . $stmt -> error;
+		}
+		if (!$stmt -> execute()) {
+			echo "Execute failed: (" . $stmt -> errno . ") " . $stmt -> error;
+			$obj->status = "Registration failed, please try again later";
+		}else{
+			$obj->status = "success";
+		}
 	}else{
 		$obj->status = "failure";
 	}
