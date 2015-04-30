@@ -44,7 +44,7 @@
 		refresh();
 		function refresh(){
 			jQuery.ajax({
-				url: "<?php echo $base_url; ?>/list.php",
+				url: "<?php echo $base_url; ?>/rest.php",
 				context: document.body,
 				dataType: "json"
 			}).done(function (data) {
