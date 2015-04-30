@@ -8,7 +8,6 @@ if (isset($_GET['time'])) {
 } elseif (isset($_GET['bpm'])) {
 	$obj = new stdClass();
 	$obj -> BPM = $_GET['bpm'];
-	$obj -> Time = date('Y-m-d H:i:s');
 	$obj -> UUID = $_GET['UUID'];
 	$res = write_heartbeat($obj);
 } else {

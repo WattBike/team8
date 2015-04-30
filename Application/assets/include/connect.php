@@ -129,7 +129,7 @@ function register_device($mail, $pass, $UUID) {
 }
 
 function write_heartbeat($heartbeat) {
-	if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "Time") && property_exists($heartbeat, "UUID")) {
+	if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
 		$mysqli = connect();
 		if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;"))) {
 			$obj -> status = "Logging heartbeat failed, please try again later";
@@ -147,7 +147,7 @@ function write_heartbeat($heartbeat) {
 			if ($logged_in) {
 				$result = $res -> fetch_all();
 				$member_id = $result[0][0];
-				if (!($stmt = $mysqli -> prepare("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES ('?', CURRENT_TIMESTAMP, '?', '?');"))) {
+				if (!($stmt = $mysqli -> prepare("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);"))) {
 					$obj -> status = "Heartbeat failed to register";
 				}
 				$temp_session = 0;
