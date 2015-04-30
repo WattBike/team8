@@ -61,7 +61,7 @@
 					);
 				}
 			});
-			setTimeout(refresh, 900000);
+			setTimeout(refresh, 15000);
 		}
 	});
 </script>
