@@ -94,12 +94,11 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 }
 
 function register_device($mail, $pass, $UUID) {
-	$prePass = $pass;
 	$mysqli = connect();
-	$obj = new stdClass();
 	$mail = $mysqli -> real_escape_string($mail);
 	$pass = $mysqli -> real_escape_string($pass);
 	$pass = hash_pass($mail, $pass);
+	$obj = new stdClass();
 	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
 		$obj -> status = "Login failed to register";
 	}
