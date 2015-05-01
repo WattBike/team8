@@ -124,7 +124,10 @@ function register_device($mail, $pass, $UUID) {
 		} else {
 			$obj -> status = "Login Success";
 		}
+	}else{
+		$obj -> status = "Your password and/or username were incorrect.";
 	}
+	return $obj;
 }
 
 function write_heartbeat($heartbeat) {
