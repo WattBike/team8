@@ -10,9 +10,10 @@ if (isset($_GET['time'])) {
 	$obj -> BPM = $_GET['bpm'];
 	$obj -> UUID = $_GET['UUID'];
 	$res = write_heartbeat($obj);
-} else {
+} elseif(isset($_GET['email'])){
+	register_device($_GET['email'], $_GET['pass'], $_GET['UUID']);
+}else{
 	$res = get_user_session(-1);
 }
-
 echo json_encode($res);
 ?>

@@ -97,7 +97,6 @@ function register_device($mail, $pass, $UUID) {
 	$mysqli = connect();
 	$mail = $mysqli -> real_escape_string($mail);
 	$pass = $mysqli -> real_escape_string($pass);
-	$pass = hash_pass($mail, $pass);
 	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
 		$obj -> status = "Login failed to register";
 	}
@@ -113,7 +112,7 @@ function register_device($mail, $pass, $UUID) {
 	$logged_in = ($res -> num_rows == 1);
 	if ($logged_in) {
 		$result = $res -> fetch_all();
-		$member_id = $result[0][1];
+		$member_id = $result[0][0];
 		if (!($stmt = $mysqli -> prepare("INSERT INTO `Member_devices` (`member_id`, `UUID`) VALUES (?, ?);"))) {
 			$obj -> status = "Login failed to register";
 		}
