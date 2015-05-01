@@ -163,9 +163,11 @@ function write_heartbeat($heartbeat) {
 				}
 			}
 		}
+		return $obj;
 	} else {
 		$obj -> status = "failure";
+		return $obj;
 	}
-	return $obj;
+	
 }
 ?>
