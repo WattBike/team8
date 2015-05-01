@@ -94,6 +94,7 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 }
 
 function register_device($mail, $pass, $UUID) {
+	$prePass = $pass;
 	$mysqli = connect();
 	$obj = new stdClass();
 	$mail = $mysqli -> real_escape_string($mail);
@@ -127,7 +128,7 @@ function register_device($mail, $pass, $UUID) {
 			$obj -> status = "Login Success";
 		}
 	} else {
-		$obj -> status = "Your password and/or username were incorrect.\n user: ".$mail."\n pass: ".$pass;
+		$obj -> status = "Your password and/or username were incorrect.\n user: ".$mail."\n pass: ".$prePass;
 	}
 	return $obj;
 }
