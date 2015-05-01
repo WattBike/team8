@@ -95,6 +95,7 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 
 function register_device($mail, $pass, $UUID) {
 	$mysqli = connect();
+	$obj = new stdClass();
 	$mail = $mysqli -> real_escape_string($mail);
 	$pass = $mysqli -> real_escape_string($pass);
 	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
@@ -132,6 +133,7 @@ function register_device($mail, $pass, $UUID) {
 
 function write_heartbeat($heartbeat) {
 	if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
+		$obj = new stdClass();
 		$mysqli = connect();
 		if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;"))) {
 			$obj -> status = "Logging heartbeat failed, please try again later";
