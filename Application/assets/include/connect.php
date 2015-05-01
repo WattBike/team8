@@ -4,6 +4,7 @@ if (!defined('safeGuard')) {
 }
 session_start();
 date_default_timezone_set('UTC');
+global $member_id;
 function connect() {
 	global $mysqliHost, $mysqliUsername, $mysqliPassword, $mysqliDatabase;
 	require_once (__ROOT__ . '/assets/include/functions.php');
@@ -18,7 +19,7 @@ function verified_login($mail, $pass) {
 	$mail = $mysqli -> real_escape_string($mail);
 	$pass = $mysqli -> real_escape_string($pass);
 	$pass = hash_pass($mail, $pass);
-	if (!($stmt = $mysqli -> prepare("SELECT `email_id`, `password`, `firstname` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
+	if (!($stmt = $mysqli -> prepare("SELECT `firstname`, `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
 		echo "Prepare failed: (" . $mysqli -> errno . ") " . $mysqli -> error;
 	}
 	if (!$stmt -> bind_param('ss', $mail, $pass)) {
@@ -34,7 +35,8 @@ function verified_login($mail, $pass) {
 	if ($logged_in) {
 		$result = $res -> fetch_all();
 		$_SESSION['mail'] = $mail;
-		$_SESSION['first_name'] = $result[0][2];
+		$_SESSION['first_name'] = $result[0][0];
+		$member_id = $result[0][1];
 	} else {
 		session_destroy();
 	}
@@ -94,27 +96,7 @@ function get_user_session($id = -1, $time = "2015-01-01 00:00:00") {
 }
 
 function register_device($mail, $pass, $UUID) {
-	$mysqli = connect();
-	$mail = $mysqli -> real_escape_string($mail);
-	$pass = $mysqli -> real_escape_string($pass);
-	$pass = hash_pass($mail, $pass);
-	$obj = new stdClass();
-	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
-		$obj -> status = "Login failed to register";
-	}
-	if (!$stmt -> bind_param('ss', $mail, $pass)) {
-		$obj -> status = "Login failed to register";
-	}
-	if (!$stmt -> execute()) {
-		$obj -> status = "Login failed to register";
-	}
-	if (!($res = $stmt -> get_result())) {
-		$obj -> status = "Login failed to register";
-	}
-	$logged_in = ($res -> num_rows == 1);
-	if ($logged_in) {
-		$result = $res -> fetch_all();
-		$member_id = $result[0][0];
+	if (verified_login($mail, $pass)) {
 		if (!($stmt = $mysqli -> prepare("INSERT INTO `Member_devices` (`member_id`, `UUID`) VALUES (?, ?);"))) {
 			$obj -> status = "Login failed to register";
 		}
@@ -127,7 +109,7 @@ function register_device($mail, $pass, $UUID) {
 			$obj -> status = "Login Success";
 		}
 	} else {
-		$obj -> status = "Your password and/or username were incorrect.\n user: ".$mail."\n pass: ".$prePass;
+		$obj -> status = "Your password and/or username were incorrect.\n user: ".$mail."\n pass: ".$pass;
 	}
 	return $obj;
 }
