@@ -98,6 +98,7 @@ function register_device($mail, $pass, $UUID) {
 	$obj = new stdClass();
 	$mail = $mysqli -> real_escape_string($mail);
 	$pass = $mysqli -> real_escape_string($pass);
+	$pass = hash_pass($mail, $pass);
 	if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?"))) {
 		$obj -> status = "Login failed to register";
 	}
