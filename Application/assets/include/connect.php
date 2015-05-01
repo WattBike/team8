@@ -126,8 +126,8 @@ function register_device($mail, $pass, $UUID) {
 		} else {
 			$obj -> status = "Login Success";
 		}
-	}else{
-		$obj -> status = "Your password and/or username were incorrect.";
+	} else {
+		$obj -> status = "Your password and/or username were incorrect.\n user: ".$mail."\n pass: ".$pass;
 	}
 	return $obj;
 }
@@ -171,6 +171,6 @@ function write_heartbeat($heartbeat) {
 		$obj -> status = "failure";
 		return $obj;
 	}
-	
+
 }
 ?>
