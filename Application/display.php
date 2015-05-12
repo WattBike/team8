@@ -11,7 +11,7 @@
     else:
 ?>
 <div class="container">
-    <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name'];?></small></h1>
+    <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name']; ?></small></h1>
     <a class="btn btn-success" href="session.php">Open last training session</a>
     <br>
     <a class="btn btn-default" href="new.php">Start new training</a>
