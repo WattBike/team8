@@ -15,6 +15,9 @@
     <h2>A new session is started</h2>
     <a class="btn btn-primary" href="display.php">Back</a>
     <a class="btn btn-warning" href="index.php">Logout</a>
+    <?php
+    
+    ?>
 	<table class="table">
 		<thead>
 		    <tr>
