@@ -38,7 +38,7 @@
             <?php $rows = get_user_session();
             $session_nr=0;
             $nr= 1;
-            $old_nr=0;
+            $old_nr=1;
             for($i = 0; $i < count($rows); ++$i):
                 $row = $rows[$i];
                 if($old_nr!=$row['session_nr']){
@@ -51,8 +51,7 @@
                     <td><?php echo $row['bpm']; ?></td>
                     <td><?php echo $row['time']; ?></td>
                 </tr>
-            <?php $session=$row['session_nr']; 
-            endfor; ?>
+            <?php endfor; ?>
 	    </tbody>
 	</table>
 </div><!-- /card-container -->
