@@ -38,12 +38,12 @@
             <?php $rows = get_user_session();
             $session_nr=0;
             $nr= 1;
-            $old_nr=1;
+            $old_nr=0;
             for($i = 0; $i < count($rows); ++$i):
                 $row = $rows[$i];
                 if($old_nr!=$row['session_nr']){
                     $old_nr=$row['session_nr'];
-                    $nr+=1;
+                    $nr=$nr+1;
                 }
                 ?>
                 <tr>
@@ -60,7 +60,7 @@
 ?>
 <script type="text/javascript">
 	jQuery(document).ready(function () {
-		refresh();
+//		refresh();
 		function refresh(){
 			jQuery.ajax({
 				url: "<?php echo $base_url; ?>/rest.php",
