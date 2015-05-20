@@ -115,6 +115,7 @@ function register_device($mail, $pass, $UUID) {
 }
 
 function write_heartbeat($heartbeat) {
+    $temp_session = 0;
 	if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
 		$obj = new stdClass();
 		$mysqli = connect();
@@ -134,11 +135,14 @@ function write_heartbeat($heartbeat) {
 			if ($logged_in) {
 				$result = $res -> fetch_all();
 				$member_id = $result[0][0];
+                $session_query = "SELECT MAX(`session_nr`) FROM `Training_session` WHERE `member_id`=".$member_id.";";
+                $max_session_result = $mysqli -> query($session_query);
+                $max_session = $max_session_result->fetch_array();
 				if (!($stmt = $mysqli -> prepare("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);"))) {
 					$obj -> status = "Heartbeat failed to register";
 				}
-				$temp_session = 0;
-				if (!$stmt -> bind_param('iii', $heartbeat -> BPM, $temp_session, $member_id)) {
+
+				if (!$stmt -> bind_param('iii', $heartbeat -> BPM, $max_session[0], $member_id)) {
 					$obj -> status = "Heartbeat failed to register";
 				}
 				if (!$stmt -> execute()) {
