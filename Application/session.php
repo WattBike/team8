@@ -11,13 +11,12 @@
 	else:
 ?>
 <div class="container">
+	<a class="btn btn-default" href="display.php">&larr; Back</a>
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name']; ?></small></h1>
-    <h2>A new session is started</h2>
-    <a class="btn btn-primary" href="display.php">Back</a>
-    <a class="btn btn-warning" href="index.php">Logout</a>
-    <form method="post" id="session">
-        <select name="session">
-            <option value="0">Choose a session</option>
+    <form method="post" id="session" class="form-inline">
+      <b>Viewing session:</b>
+			<select name="session" class="form-control" id="sessionSelector">
+            <option value="-1">Choose a session</option>
             <?php $rows = get_total_session();
                 $session_nr=0;
                 for($i = 0; $i < count($rows); ++$i):
@@ -25,9 +24,7 @@
                     $session_nr++; ?>
                     <option value="<?php echo $row['session_nr']; ?>"><?php echo $session_nr ?></option>
             <?php endfor; ?>
-        </select>
-        <input class="btn btn-primary" type="submit" name="submit">
-    </form>
+        </select>    </form>
     
     <?php 
         if(isset($_POST['submit'])){
@@ -44,11 +41,10 @@
 	    	</tr>
 	  	</thead>
 	  	<tbody>
-            <?php $rows = get_user_session();
+           <?php $rows = get_user_session();
             
                 for($i = 0; $i < count($rows); ++$i):
                     $row = $rows[$i];
-                    if($session>0){}
             ?>
                 <tr>
                     <td><?php echo $row['new_session_nr']; ?></td>
@@ -64,10 +60,17 @@
 ?>
 <script type="text/javascript">
 	jQuery(document).ready(function () {
-//		refresh();
-		function refresh(){
+		refresh();
+
+		$("#sessionSelector").click(function () {
+      var value = $("#sessionSelector option:selected").val();
+			refresh(value);
+		});
+
+		function refresh(session){
+			var newsession = (session==undefined ? -1 : session);
 			jQuery.ajax({
-				url: "<?php echo $base_url; ?>/rest.php",
+				url: "<?php echo $base_url; ?>/rest.php?session=" +newsession+ "",
 				context: document.body,
 				dataType: "json"
 			}).done(function (data) {
@@ -77,7 +80,7 @@
 					jQuery('tbody').html(
 						oldData
 						+ "<tr>"
-						+ "		<td>" + data[i].newName + "</td>"
+						+ "		<td>" + data[i].new_session_nr + "</td>"
 						+ "		<td>" + data[i].bpm + "</td>"
 						+ "		<td>" + data[i].time + "</td>"
 						+ "</tr>"
