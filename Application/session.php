@@ -62,13 +62,12 @@
 	jQuery(document).ready(function () {
 		refresh();
 
-		$("#sessionSelector").click(function () {
-      var value = $("#sessionSelector option:selected").val();
-			refresh(value);
+		$("#sessionSelector").change(function () {
+			refresh();
 		});
 
-		function refresh(session){
-			var newsession = (session==undefined ? -1 : session);
+		function refresh(){
+			var newsession = $("#sessionSelector option:selected").val();
 			jQuery.ajax({
 				url: "<?php echo $base_url; ?>/rest.php?session=" +newsession+ "",
 				context: document.body,
