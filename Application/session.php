@@ -15,9 +15,17 @@
     <h2>A new session is started</h2>
     <a class="btn btn-primary" href="display.php">Back</a>
     <a class="btn btn-warning" href="index.php">Logout</a>
-    <?php
-    
-    ?>
+    <select name="session">
+        <option>Choose a session</option>
+        <?php $rows = get_total_session();
+            $session_nr=0;
+            for($i = 0; $i < count($rows); ++$i):
+                $row = $rows[$i]; 
+                $session_nr++; ?>
+                <option value="<?php $row['session_nr']; ?>"><?php echo $session_nr ?></option>
+        <?php endfor; ?>
+        
+    </select>
 	<table class="table">
 		<thead>
 		    <tr>
@@ -28,21 +36,30 @@
 	  	</thead>
 	  	<tbody>
             <?php $rows = get_user_session();
+            $session_nr=0;
+            $nr= 1;
+            $old_nr=0;
             for($i = 0; $i < count($rows); ++$i):
-                $row = $rows[$i]; ?>
+                $row = $rows[$i];
+                if($old_nr!=$row['session_nr']){
+                    $old_nr=$row['session_nr'];
+                    $nr+=1;
+                }
+                ?>
                 <tr>
-                    <td><?php echo $row['session_nr']; ?></td>
+                    <td><?php echo $nr; ?></td>
                     <td><?php echo $row['bpm']; ?></td>
                     <td><?php echo $row['time']; ?></td>
                 </tr>
-            <?php endfor; ?>
+            <?php $session=$row['session_nr']; 
+            endfor; ?>
 	    </tbody>
 	</table>
 </div><!-- /card-container -->
 <?php
 	require_once "assets/include/footer-tags.php";
 ?>
-<script>
+<script type="text/javascript">
 	jQuery(document).ready(function () {
 		refresh();
 		function refresh(){
@@ -57,7 +74,7 @@
 					jQuery('tbody').html(
 						oldData
 						+ "<tr>"
-						+ "		<td>" + data[i].session_nr + "</td>"
+						+ "		<td>" + data[i].newName + "</td>"
 						+ "		<td>" + data[i].bpm + "</td>"
 						+ "		<td>" + data[i].time + "</td>"
 						+ "</tr>"
