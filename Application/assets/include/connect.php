@@ -166,4 +166,17 @@ function write_heartbeat($heartbeat) {
 		return $obj;
 	}
 }
+
+
+//TODO: write this to perfection
+function register_device($email, $pass, $UUID){
+	$logged_in = verified_login($mail, $pass);
+	$obj = new stdClass();
+	if($logged_in){
+		$obj -> status = "login";
+	}else{
+		$obj -> status = "failure";
+	}
+	return $obj;
+}
 ?>
