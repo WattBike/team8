@@ -79,9 +79,9 @@ function get_user_session($id = -1){
         $row       = $member_res->fetch_assoc();
         $member_id = $row['member_id'];
         if($id>-1){
-            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' AND `session_nr`='$id' ";
+            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY `session_nr` ";
         }else{
-            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id'";
+            $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY `session_nr` ASC";
         }
         $results   = $mysqli->query($sql);
         $session_nr= 0;
