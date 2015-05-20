@@ -84,13 +84,15 @@ function get_user_session($id = -1){
             $sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY `session_nr` ASC";
         }
         $results   = $mysqli->query($sql);
-        $session_nr= 0;
+        $old_nr= 0;
+        $nr=1;
         for($i=0; $i<$results->num_rows;$i++){
             $tmp = $results->fetch_array();
-            if($tmp['session_nr']!=$session_nr){
-                $session_nr++;
+            if($tmp['session_nr']!=$old_nr){
+                $old_nr=$tmp['session_nr'];
+                $nr=$nr+1;
             }
-            $tmp['newName'] = $session_nr;
+            $tmp['new_session_nr'] = $nr;
             array_push($resultset, $tmp);
         }
         $results->close();
@@ -102,6 +104,7 @@ function get_user_session($id = -1){
 function get_total_session(){
     $mysqli   = connect();
     $resultset= array();
+    $session= array();
  	$mail     = $mysqli->real_escape_string($_SESSION['mail']);
     $member_res = $mysqli->query("SELECT `member_id` FROM `Member` WHERE `email_id`='$mail'");
     if($member_res){
@@ -109,6 +112,7 @@ function get_total_session(){
         $id= $row['member_id'];
         $sql = "SELECT `session_nr`, `training_type_nr`, `date` FROM `Training_session` WHERE `member_id`='$id' ORDER BY `session_nr`";
         $results    =   $mysqli->query($sql);
+        $session_nr=1;
         for($i=0; $i<$results->num_rows; $i++){
             array_push($resultset, $results->fetch_array());
         }

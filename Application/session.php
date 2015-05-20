@@ -15,17 +15,26 @@
     <h2>A new session is started</h2>
     <a class="btn btn-primary" href="display.php">Back</a>
     <a class="btn btn-warning" href="index.php">Logout</a>
-    <select name="session">
-        <option>Choose a session</option>
-        <?php $rows = get_total_session();
-            $session_nr=0;
-            for($i = 0; $i < count($rows); ++$i):
-                $row = $rows[$i]; 
-                $session_nr++; ?>
-                <option value="<?php $row['session_nr']; ?>"><?php echo $session_nr ?></option>
-        <?php endfor; ?>
-        
-    </select>
+    <form method="post" id="session">
+        <select name="session">
+            <option value="0">Choose a session</option>
+            <?php $rows = get_total_session();
+                $session_nr=0;
+                for($i = 0; $i < count($rows); ++$i):
+                    $row = $rows[$i]; 
+                    $session_nr++; ?>
+                    <option value="<?php echo $row['session_nr']; ?>"><?php echo $session_nr ?></option>
+            <?php endfor; ?>
+        </select>
+        <input class="btn btn-primary" type="submit" name="submit">
+    </form>
+    
+    <?php 
+        if(isset($_POST['submit'])){
+            $session=$_POST['session'];
+            echo "You have selected :" .$session; // Displaying Selected Value
+        }
+    ?>
 	<table class="table">
 		<thead>
 		    <tr>
@@ -36,18 +45,13 @@
 	  	</thead>
 	  	<tbody>
             <?php $rows = get_user_session();
-            $session_nr=0;
-            $nr= 1;
-            $old_nr=0;
-            for($i = 0; $i < count($rows); ++$i):
-                $row = $rows[$i];
-                if($old_nr!=$row['session_nr']){
-                    $old_nr=$row['session_nr'];
-                    $nr=$nr+1;
-                }
-                ?>
+            
+                for($i = 0; $i < count($rows); ++$i):
+                    $row = $rows[$i];
+                    if($session>0){}
+            ?>
                 <tr>
-                    <td><?php echo $nr; ?></td>
+                    <td><?php echo $row['new_session_nr']; ?></td>
                     <td><?php echo $row['bpm']; ?></td>
                     <td><?php echo $row['time']; ?></td>
                 </tr>
