@@ -1,11 +1,12 @@
 <?php
 define('safeGuard', TRUE);
-define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
+//TODO fix register with class
 require_once(__ROOT__ . '/assets/include/connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
+$connection = new Connect();
 if (isset($_POST['email']) && ($_POST['email'] != "")):
-    $registration = register_user(
+    $registration = $connection->register_user(
         $_POST['email'],
         $_POST['password'],
         $_POST['verificationPassword'],
@@ -115,6 +116,6 @@ else:
 	</form><!-- /form -->
 </div><!-- /card-container -->
 <?php
-endif;
-require_once "assets/include/footer.php";
-?>
+endif;?>
+<?php require_once(__ROOT__ . '/assets/include/footer.php'); ?>
+
