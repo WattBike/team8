@@ -24,14 +24,9 @@
                     $session_nr++; ?>
                     <option value="<?php echo $row['session_nr']; ?>"><?php echo $session_nr ?></option>
             <?php endfor; ?>
-        </select>    </form>
-    
-    <?php 
-        if(isset($_POST['submit'])){
-            $session=$_POST['session'];
-            echo "You have selected :" .$session; // Displaying Selected Value
-        }
-    ?>
+        </select>    
+    </form>
+
 	<table class="table">
 		<thead>
 		    <tr>
