@@ -3,7 +3,6 @@
 	define('safeGuard', TRUE);
 	define('__ROOT__', dirname(__FILE__));
 	require_once(__ROOT__ . '/assets/include/connect.php');
-	require_once(__ROOT__ . '/assets/include/header.php');
 	$connection = new Connect;
 $res = array();
 if (isset($_GET['session'])) {
