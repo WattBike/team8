@@ -53,23 +53,20 @@ class Connect {
 	}
 
 	function get_user_session($session = -1) {
-		$mysqli = $this -> connection();
-		$resultset = array();
-		$mail = $mysqli -> real_escape_string($_SESSION['mail']);
-		$member_res = $mysqli -> query("SELECT `member_id` FROM `Member` WHERE `email_id`='$mail'");
-		if ($member_res) {
-			$row = $member_res -> fetch_assoc();
+		$db = new db;
+		$member_res = $db->query_1("SELECT `member_id` FROM `Member` WHERE `email_id`=?",FALSE,"s",$_SESSION['mail']);
+		if (count($member_res['result']) == 1) {
+			$row = $member_res['result'][0];
 			$member_id = $row['member_id'];
 			if ($session < 0) {
-				$sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' ORDER BY `session_nr` ";
+				$results = query_1("SELECT * FROM `Heartrate` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id) ;
 			} else {
-				$sql = "SELECT * FROM `Heartrate` WHERE `member_id`='$member_id' AND `session_nr`='$session' ORDER BY `time` ASC";
+				$results = query_2("SELECT * FROM `Heartrate` WHERE `member_id`=? AND `session_nr`=? ORDER BY `time` ASC",FALSE,"ii",$member_id, $session) ;
 			}
-			$results = $mysqli -> query($sql);
 			$old_nr = 0;
 			$nr = 1;
-			for ($i = 0; $i < $results -> num_rows; $i++) {
-				$tmp = $results -> fetch_array();
+			for ($i = 0; $i < count($results['result']); $i++) {
+				$tmp = $results['result'][$i];
 				if ($tmp['session_nr'] != $old_nr) {
 					$old_nr = $tmp['session_nr'];
 					$nr = $nr + 1;
@@ -77,30 +74,24 @@ class Connect {
 				$tmp['new_session_nr'] = $nr;
 				array_push($resultset, $tmp);
 			}
-			$results -> close();
 		}
-		$member_res -> close();
 		return $resultset;
 	}
 
 	function get_total_session() {
-		$mysqli = $this -> connection();
-		$resultset = array();
+		$db = new db;
 		$session = array();
-		$mail = $mysqli -> real_escape_string($_SESSION['mail']);
-		$member_res = $mysqli -> query("SELECT `member_id` FROM `Member` WHERE `email_id`='$mail'");
-		if ($member_res) {
-			$row = $member_res -> fetch_assoc();
-			$id = $row['member_id'];
-			$sql = "SELECT `session_nr`, `training_type_nr`, `date` FROM `Training_session` WHERE `member_id`='$id' ORDER BY `session_nr`";
+		$member_res = $db->query_1("SELECT `member_id` FROM `Member` WHERE `email_id`=?",FALSE,"s",$_SESSION['mail']);
+		if (count($member_res['result']) == 1) {
+			$row = $member_res['result'][0];
+			$member_id = $row['member_id'];
+			$results = query_1("SELECT `session_nr`, `training_type_nr`, `date` FROM `Training_session` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id);
 			$results = $mysqli -> query($sql);
-			$session_nr = 1;
-			for ($i = 0; $i < $results -> num_rows; $i++) {
-				array_push($resultset, $results -> fetch_array());
+			for ($i = 0; $i < count($results['result']); $i++) {
+				array_push($resultset, $results['result'][$i]);
 			}
 			$results -> close();
 		}
-		$member_res -> close();
 		return $resultset;
 	}
 
