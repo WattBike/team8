@@ -98,44 +98,23 @@ class Connect {
 	function write_heartbeat($heartbeat) {
 		$temp_session = 0;
 		if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
-			$obj = new stdClass();
-			$mysqli = $this -> connection();
-			if (!($stmt = $mysqli -> prepare("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;"))) {
-				$obj -> status = "Logging heartbeat failed, please try again later";
-			}
-			if (!$stmt -> bind_param('s', $heartbeat -> UUID)) {
-				$obj -> status = "Logging heartbeat failed, please try again later";
-			}
-			if (!$stmt -> execute()) {
-				$obj -> status = "Logging heartbeat failed, please try again later";
-			}
-			if (!($res = $stmt -> get_result())) {
-				$obj -> status = "Logging heartbeat failed, please try again later";
-			} else {
-				$logged_in = ($res -> num_rows == 1);
-				if ($logged_in) {
-					$result = $res -> fetch_all();
-					$member_id = $result[0][0];
-					$session_query = "SELECT MAX(`session_nr`) FROM `Training_session` WHERE `member_id`=" . $member_id . ";";
-					$max_session_result = $mysqli -> query($session_query);
-					$max_session = $max_session_result -> fetch_array();
-					if (!($stmt = $mysqli -> prepare("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);"))) {
-						$obj -> status = "Heartbeat failed to register";
-					}
-
-					if (!$stmt -> bind_param('iii', $heartbeat -> BPM, $max_session[0], $member_id)) {
-						$obj -> status = "Heartbeat failed to register";
-					}
-					if (!$stmt -> execute()) {
-						$obj -> status = "Heartbeat failed to register";
-					} else {
-						$obj -> status = "Heartbeat Success";
-					}
-				}
-			}
+		$db = new db;
+		$session = array();
+		$res = $db->query_1("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$heartbeat -> UUID);
+        $logged_in = (count($res['result']) == 1);
+        if ($logged_in) {
+            $member_id = $res['result'][0]['member_id'];
+            $max_session_res = $db->query_1("SELECT MAX(`session_nr`) FROM `Training_session` WHERE `member_id`=?;",FALSE,"i",$member_id);
+            $max_session = $max_session_res['result'][0]['MAX(`session_nr`)'];
+            $res = $db->query_3("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);",TRUE,"iii",$heartbeat -> BPM, $max_session, $member_id);
+            if ($res['result']) {
+                $obj -> status = "Heartrate recorded successfully!";
+            }else{
+                $obj -> status = "Heartrate failed to save.";
+            }
 			return $obj;
 		} else {
-			$obj -> status = "failure";
+			$obj -> status = "Unfortunately, no account could be found to save your heartrate too";
 			return $obj;
 		}
 	}
