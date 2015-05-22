@@ -2,7 +2,7 @@
 	session_start();
 	define('safeGuard', TRUE);
 	define('__ROOT__', dirname(__FILE__));
-	require_once(__ROOT__ . '/assets/include/connect.php');
+	require_once(__ROOT__ . '/assets/classes/class.connect.php');
 	require_once(__ROOT__ . '/assets/include/header.php');
 	$connection = new Connect;
 	if (!in_array("mail", $_SESSION) || $_SESSION['mail']==""):

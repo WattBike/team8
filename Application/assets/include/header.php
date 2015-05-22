@@ -2,7 +2,7 @@
 if (!defined('safeGuard')) {
 	die('Direct access not permitted');
 }
-require_once (__ROOT__ . '/assets/include/functions.php');
+require_once (__ROOT__ . '/assets/classes/class.functions.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
