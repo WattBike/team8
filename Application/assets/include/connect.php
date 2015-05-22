@@ -186,7 +186,7 @@ class Connect{
 
 	//TODO write this to perfection
 	function register_device($email, $pass, $UUID){
-		$logged_in = $this->verified_login($mail, $pass);
+		$logged_in = $this->verified_login($email, $pass);
 		$obj = new stdClass();
 		if($logged_in){
 			$obj -> status = "login";
