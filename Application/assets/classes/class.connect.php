@@ -98,26 +98,27 @@ class Connect {
 	function write_heartbeat($heartbeat) {
 		$temp_session = 0;
 		if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
-		$db = new db;
-		$session = array();
-		$res = $db->query_1("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$heartbeat -> UUID);
-        $logged_in = (count($res['result']) == 1);
-        if ($logged_in) {
-            $member_id = $res['result'][0]['member_id'];
-            $max_session_res = $db->query_1("SELECT MAX(`session_nr`) FROM `Training_session` WHERE `member_id`=?;",FALSE,"i",$member_id);
-            $max_session = $max_session_res['result'][0]['MAX(`session_nr`)'];
-            $res = $db->query_3("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);",TRUE,"iii",$heartbeat -> BPM, $max_session, $member_id);
-            if ($res['result']) {
-                $obj -> status = "Heartrate recorded successfully!";
-            }else{
-                $obj -> status = "Heartrate failed to save.";
+            $db = new db;
+            $session = array();
+            $res = $db->query_1("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$heartbeat -> UUID);
+            $logged_in = (count($res['result']) == 1);
+            if ($logged_in) {
+                $member_id = $res['result'][0]['member_id'];
+                $max_session_res = $db->query_1("SELECT MAX(`session_nr`) FROM `Training_session` WHERE `member_id`=?;",FALSE,"i",$member_id);
+                $max_session = $max_session_res['result'][0]['MAX(`session_nr`)'];
+                $res = $db->query_3("INSERT INTO `Heartrate` (`bpm`, `time`, `session_nr`, `member_id`) VALUES (?, CURRENT_TIMESTAMP, ?, ?);",TRUE,"iii",$heartbeat -> BPM, $max_session, $member_id);
+                if ($res['result']) {
+                    $obj -> status = "Heartrate recorded successfully!";
+                }else{
+                    $obj -> status = "Heartrate failed to save.";
+                }
+                return $obj;
+            } else {
+                $obj -> status = "Unfortunately, no account could be found to save your heartrate too";
+                return $obj;
             }
-			return $obj;
-		} else {
-			$obj -> status = "Unfortunately, no account could be found to save your heartrate too";
-			return $obj;
-		}
-	}
+        }
+    }
 
 	//TODO write this to perfection
 	function register_device($email, $pass, $UUID) {
