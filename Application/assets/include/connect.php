@@ -95,6 +95,7 @@ function get_user_session($session){
             $tmp['new_session_nr'] = $nr;
             array_push($resultset, $tmp);
         }
+        
         $results->close();
     }
     $member_res->close();

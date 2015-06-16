@@ -15,18 +15,26 @@
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name']; ?></small></h1>
     <form method="post" id="session" class="form-inline">
       <b>Viewing session:</b>
-			<select name="session" class="form-control" id="sessionSelector">
-            <option value="-1">Choose a session</option>
+		<select name="session_select" class="form-control" id="sessionSelector">
+            <option value="-1|-1">Choose a session</option>
             <?php $rows = get_total_session();
                 $session_nr=0;
                 for($i = 0; $i < count($rows); ++$i):
                     $row = $rows[$i]; 
                     $session_nr++; ?>
-                    <option value="<?php echo $row['session_nr']; ?>"><?php echo $session_nr ?></option>
-            <?php endfor; ?>
+                    <option value="<?php echo $row['session_nr']; ?>|<?php echo $session_nr ?>"><?php echo $session_nr ?></option>
+            <?php endfor; 
+            
+            ?>
         </select>    
     </form>
-
+    <?php
+    	$session_result = $_POST['session_select'];
+    	echo $session_result;
+        $result_explode = explode('|', $session_result);
+        echo "DBsession: ". $result_explode[0]."<br />";
+        echo "newSession: ". $result_explode[1]."<br />";
+    ?>
 	<table class="table">
 		<thead>
 		    <tr>
@@ -36,7 +44,7 @@
 	    	</tr>
 	  	</thead>
 	  	<tbody>
-           <?php $rows = get_user_session();
+           <?php $rows = get_user_session(0);
             
                 for($i = 0; $i < count($rows); ++$i):
                     $row = $rows[$i];
@@ -53,6 +61,7 @@
 <?php
 	require_once "assets/include/footer-tags.php";
 ?>
+
 <script type="text/javascript">
 	jQuery(document).ready(function () {
 		refresh();
