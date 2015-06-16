@@ -4,11 +4,11 @@ if (!defined('safeGuard')) {
 }
 require_once (__ROOT__ . '/assets/classes/class.functions.php');
 require_once (__ROOT__ . '/assets/classes/class.db.php');
-session_start();
 /**
  * Connects the DB to the application
  */
 class Connect {
+    var $ID;
 
 	/**
 	 * Redirects the user to a page.
@@ -33,6 +33,7 @@ class Connect {
 			$result = $res['result'][0];
 			$_SESSION['mail'] = $mail;
 			$_SESSION['first_name'] = $result['firstname'];
+            $this->ID = $result['member_id'];
 		}
 		return $logged_in;
 	}
@@ -122,10 +123,26 @@ class Connect {
 
 	//TODO write this to perfection
 	function register_device($email, $pass, $UUID) {
+        $db = new db;
 		$logged_in = $this -> verified_login($email, $pass);
+        $member_id = $this->ID;
+
 		$obj = new stdClass();
 		if ($logged_in) {
 			$obj -> status = "login";
+            $res = $db->query_1("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$UUID);
+            if(array_key_exists(0,$res['result'])){
+                if($res['result'][0]['member_id']==$member_id){
+                    $obj->desc = "Device already registered to ".$res['result'][0]['member_id'];
+                }else{
+                    $obj -> status = "failure";
+                    $obj->desc = "we're sorry but you can only have one user/device at this moment. Please use a different device.";
+                }
+            }
+            else{
+                $obj->desc = "Welcome new device of ".$member_id;
+                $res = $db->query_2("INSERT INTO `Member_devices` VALUES (?, ?, CURRENT_TIMESTAMP);",TRUE,"si",$UUID, $member_id);
+            }
 		} else {
 			$obj -> status = "failure";
 		}
