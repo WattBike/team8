@@ -145,6 +145,7 @@ class Connect {
             }
 		} else {
 			$obj -> status = "failure";
+            $obj->desc = "Username and/or password were incorrect";
 		}
 		return $obj;
 	}
