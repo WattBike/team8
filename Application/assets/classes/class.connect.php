@@ -60,9 +60,9 @@ class Connect {
 			$row = $member_res['result'][0];
 			$member_id = $row['member_id'];
 			if ($session < 0) {
-				$results = query_1("SELECT * FROM `Heartrate` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id) ;
+				$results = $db->query_1("SELECT * FROM `Heartrate` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id) ;
 			} else {
-				$results = query_2("SELECT * FROM `Heartrate` WHERE `member_id`=? AND `session_nr`=? ORDER BY `time` ASC",FALSE,"ii",$member_id, $session) ;
+				$results = $db->query_2("SELECT * FROM `Heartrate` WHERE `member_id`=? AND `session_nr`=? ORDER BY `time` ASC",FALSE,"ii",$member_id, $session) ;
 			}
 			$old_nr = 0;
 			$nr = 1;
@@ -86,8 +86,7 @@ class Connect {
 		if (count($member_res['result']) == 1) {
 			$row = $member_res['result'][0];
 			$member_id = $row['member_id'];
-			$results = query_1("SELECT `session_nr`, `training_type_nr`, `date` FROM `Training_session` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id);
-			$results = $mysqli -> query($sql);
+			$results = $db->query_1("SELECT `session_nr`, `training_type_nr`, `date` FROM `Training_session` WHERE `member_id`=? ORDER BY `session_nr`",FALSE,"i",$member_id);
 			for ($i = 0; $i < count($results['result']); $i++) {
 				array_push($resultset, $results['result'][$i]);
 			}
@@ -152,6 +151,15 @@ class Connect {
 		}
 		return $obj;
 	}
-
+	/**
+	 * 
+	 */
+	function unregister_device($first_active, $UUID) {
+		$db = new db;
+		$obj = new stdClass();
+		$res = $db->query_2("DELETE FROM `Member_devices` WHERE `UUID`=? AND `first_active`=?;", TRUE, "ss", $UUID, $first_active);
+		$obj->status = "attempted";
+		return $obj;
+	}
 }
 ?>

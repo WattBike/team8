@@ -12,9 +12,11 @@ if (isset($_GET['session'])) {
 	$obj -> BPM = $_GET['bpm'];
 	$obj -> UUID = $_GET['UUID'];
 	$res = $connection->write_heartbeat($obj);
-} elseif (isset($_POST['email'])) {
+} elseif (isset($_POST['email'])&&isset($_POST['UUID'])&&isset($_POST['pass'])) {
 	$res = $connection->register_device($_POST['email'], $_POST['pass'], $_POST['UUID']);
-} else {
+} elseif (isset($_POST['UUID'])&&isset($_POST['first_active'])) {
+	$res = $connection->unregister_device($_POST['first_active'], $_POST['UUID']);
+}else {
 	$res = $connection->get_user_session(-1);
 }
 echo json_encode($res);
