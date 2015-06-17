@@ -4,13 +4,14 @@ if (!defined('safeGuard')) {
 }
 ?>
 <div class="col-md-12 well">
-	<?php if(isset($status)):
+	<?php if(isset($_SESSION['status'])):
 	?>
-	<p class="alert alert-danger alert-dismissible" role="alert">
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<?php echo $status; ?>
-	</p>
-	<?php endif; ?>
+	<div class="alert alert-success">
+		<?php echo $_SESSION['status']; ?>
+	</div>
+	<?php unset($_SESSION['status']);
+		endif;
+	?>
 	<form class="form-signin" method="post" action="index.php">
 		<img class="img-circle img-responsive center-block form-group" src="https://randomuser.me/api/portraits/lego/1.jpg" width="96"/>
 		<div class="form-group">

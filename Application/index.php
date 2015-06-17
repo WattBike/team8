@@ -21,7 +21,7 @@ if (key_exists("mail", $_SESSION)) {
 	}
 } elseif (isset($_POST['email']) && ($_POST['email'] != "")) {
 	if (!$connection -> verified_login($_POST['email'], $_POST['password'])) {
-		$status = "Your username and or password were incorrect. Please try again.";
+		$_SESSION['status'] = "Your username and or password were incorrect. Please try again.";
 		$location = FALSE;
 	} else {
 		$location = TRUE;
