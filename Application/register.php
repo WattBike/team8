@@ -1,11 +1,12 @@
 <?php
 define('safeGuard', TRUE);
-define('dbConnected', TRUE);
 define('__ROOT__', dirname(__FILE__));
-require_once(__ROOT__ . '/assets/include/connect.php');
+//TODO fix register with class
+require_once(__ROOT__ . '/assets/classes/class.connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
+$connection = new Connect();
 if (isset($_POST['email']) && ($_POST['email'] != "")):
-    $registration = register_user(
+    $registration = $connection->register_user(
         $_POST['email'],
         $_POST['password'],
         $_POST['verificationPassword'],
@@ -16,12 +17,11 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
         $_POST['length'],
         $_POST['weight']
     );
-    if (!$registration["success"]) {
+    if (!$registration) {
         echo "Registration Failed <a href='register.php'>back</a>";
     } else {
-        echo "Registration Succeeded! <a href='display.php'>continue</a>";
+        echo "Registration Succeeded! <a href='index.php'>continue</a>";
     }
-    echo $registration["statuscode"];
 else:
 ?>
 <div class="col-md-12 well">
@@ -115,6 +115,6 @@ else:
 	</form><!-- /form -->
 </div><!-- /card-container -->
 <?php
-endif;
-require_once "assets/include/footer.php";
-?>
+endif;?>
+<?php require_once(__ROOT__ . '/assets/include/footer.php'); ?>
+
