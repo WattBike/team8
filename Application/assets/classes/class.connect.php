@@ -130,10 +130,11 @@ class Connect {
 		$obj = new stdClass();
 		if ($logged_in) {
 			$obj -> status = "login";
-            $res = $db->query_1("SELECT `member_id` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$UUID);
+            $res = $db->query_1("SELECT `member_id`,`first_active` FROM `Member_devices` WHERE `UUID`=?;",FALSE,"s",$UUID);
             if(array_key_exists(0,$res['result'])){
                 if($res['result'][0]['member_id']==$member_id){
                     $obj->desc = "Device already registered to ".$res['result'][0]['member_id'];
+					$obj->date = $res['result'][0]['first_active'];
                 }else{
                     $obj -> status = "failure";
                     $obj->desc = "we're sorry but you can only have one user/device at this moment. Please use a different device.";
@@ -141,7 +142,9 @@ class Connect {
             }
             else{
                 $obj->desc = "Welcome new device of ".$member_id;
-                $res = $db->query_2("INSERT INTO `Member_devices` VALUES (?, ?, CURRENT_TIMESTAMP);",TRUE,"si",$UUID, $member_id);
+				$time = $db->query_0("SELECT CURRENT_TIMESTAMP;", FALSE);
+				$obj->date = $time['result'][0]['CURRENT_TIMESTAMP'];
+                $res = $db->query_3("INSERT INTO `Member_devices` VALUES (?, ?, ?);",TRUE,"sis",$UUID, $member_id,$obj->date);
             }
 		} else {
 			$obj -> status = "failure";

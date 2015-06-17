@@ -9,6 +9,32 @@ class db {
 		return $mysqli;
 	}
 
+	function query_0($sql, $insert) {
+		$resultset = array();
+		$mysqli = $this -> connection();
+		if (!($stmt = $mysqli -> prepare($sql))) {
+			$resultset['status'] = "failure";
+			$resultset['result'] = "Prepare failed: (" . $mysqli -> errno . ") " . $mysqli -> error;
+		}
+		if (!$stmt -> execute()) {
+			$resultset['status'] = "failure";
+			$resultset['result'] = "Execute failed: (" . $stmt -> errno . ") " . $stmt -> error;
+		}
+		if (!($res = $stmt -> get_result())) {
+			$resultset['status'] = "failure";
+			$resultset['result'] = "Getting result set failed: (" . $stmt -> errno . ") " . $stmt -> error;
+		} else {
+			$resultset['status'] = "success";
+			if (!$insert) {
+				$results = $res -> fetch_all(MYSQL_ASSOC);
+				$resultset['result'] = $results;
+				$res -> free();
+			}
+		}
+		$mysqli -> close();
+		return $resultset;
+	}
+
 	function query_1($sql, $insert, $argument_sort, $argument_1) {
 		$resultset = array();
 		$mysqli = $this -> connection();
