@@ -1,12 +1,11 @@
 <?php
-session_start();
 define('safeGuard', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once (__ROOT__ . '/assets/classes/class.connect.php');
 $connection = new Connect();
 require_once (__ROOT__ . '/assets/include/header.php');
 
-if (in_array("mail", $_SESSION)) {
+if (key_exists("mail", $_SESSION)) {
 	if (isset($_GET['logout'])) {
 		if (ini_get("session.use_cookies")) {
 			$params = session_get_cookie_params();

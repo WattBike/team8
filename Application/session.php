@@ -1,16 +1,15 @@
 <?php
-	session_start();
 	define('safeGuard', TRUE);
 	define('__ROOT__', dirname(__FILE__));
 	require_once(__ROOT__ . '/assets/classes/class.connect.php');
 	require_once(__ROOT__ . '/assets/include/header.php');
 	$connection = new Connect;
-	if (!in_array("mail", $_SESSION) || $_SESSION['mail']==""):
+	if (!key_exists("mail", $_SESSION) || $_SESSION['mail']==""):
 	 	$connection->redirect("index.php", 401);
   	else:
 ?>
 <div class="container">
-	<a class="btn btn-default" href="display.php">&larr; Back</a>
+	<a class="btn btn-default" href="index.php">&larr; Back</a>
     <h1>Welcome to wattbike <small><?php echo $_SESSION['first_name']; ?></small></h1>
     <form method="post" id="session" class="form-inline">
       <b>Viewing session:</b>
