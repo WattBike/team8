@@ -1,5 +1,4 @@
 <?php
-	session_start();
 	define('safeGuard', TRUE);
 	define('__ROOT__', dirname(__FILE__));
 	require_once(__ROOT__ . '/assets/classes/class.connect.php');

@@ -166,5 +166,25 @@ class Connect {
 		return $obj;
 	}
 
+	function read_trainings_types(){
+		$db = new db;
+		$res = $db->query_0("SELECT * FROM `Training_type`;", FALSE);
+		return $res['result'];
+	}
+	
+	function new_training($type){
+		$db = new db;
+		$result = FALSE;
+		$member_res = $db -> query_1("SELECT `member_id` FROM `Member` WHERE `email_id`=?", FALSE, "s", $_SESSION['mail']);
+		$logged_in = (count($member_res['result']) == 1);
+		if ($logged_in) {
+			$member_id = $member_res['result'][0]['member_id'];
+			$max_session_res = $db -> query_0("SELECT MAX(`session_nr`) FROM `Training_session`;", FALSE);
+			$max_session = $max_session_res['result'][0]['MAX(`session_nr`)'];
+			$db->query_3("INSERT INTO `Training_session` VALUES(CURRENT_TIMESTAMP, ?, ?, ?);", TRUE, "iii", $type, $max_session+1, $member_id);
+			$result = TRUE;
+		}
+		return $result;
+	}
 }
 ?>

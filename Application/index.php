@@ -3,7 +3,7 @@ define('safeGuard', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once (__ROOT__ . '/assets/classes/class.connect.php');
 $connection = new Connect();
-require_once (__ROOT__ . '/assets/include/header.php');
+//require_once (__ROOT__ . '/assets/include/header.php');
 
 if (key_exists("mail", $_SESSION)) {
 	if (isset($_GET['logout'])) {
@@ -21,7 +21,7 @@ if (key_exists("mail", $_SESSION)) {
 	}
 } elseif (isset($_POST['email']) && ($_POST['email'] != "")) {
 	if (!$connection -> verified_login($_POST['email'], $_POST['password'])) {
-		$status = "Your username and or password were incorrect. Please try again.";
+		$_SESSION['status'] = "Your username and or password were incorrect. Please try again.";
 		$location = FALSE;
 	} else {
 		$location = TRUE;
@@ -29,6 +29,9 @@ if (key_exists("mail", $_SESSION)) {
 } else {
 	$location = FALSE;
 }
-require_once (($location) ? "display.php" : "login.php");
-require_once (__ROOT__ . '/assets/include/footer.php');
+if($location){
+	$connection->redirect("display.php", 200);
+}else{
+	$connection->redirect("login.php", 200);
+}
 ?>
