@@ -27,6 +27,7 @@ require_once (__ROOT__ . '/assets/classes/class.functions.php');
 			<?php if(key_exists('mail', $_SESSION)):?>
             	.well{background-color: #e1eeff;}
             	body{background-color: #e1eeff;}
+                .font{font-weight:100;}
             <?php else:?>
             	.well {background-color: #e1eeff;}
 				.navbar {background-color: #e1eeff;}
@@ -66,4 +67,4 @@ require_once (__ROOT__ . '/assets/classes/class.functions.php');
 	        </nav>
 	        <?php endif;?>
         <div class="container-fluid">
-            <div class="row border">
+            <div class="row">
