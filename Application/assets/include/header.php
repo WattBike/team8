@@ -59,7 +59,7 @@ require_once (__ROOT__ . '/assets/classes/class.functions.php');
 	                    </ul>
 	                    <ul class="nav navbar-nav navbar-right">
 	                        <li><a href="profile.php">Profile</a></li>
-	                        <li><a href="#">Settings</a></li>
+	                        <li><a href="settings.php">Settings</a></li>
 	                        <li><a href="index.php?logout=true">Logout</a></li>
 	                    </ul>
 	                </div><!-- /.navbar-collapse -->

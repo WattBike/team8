@@ -26,6 +26,7 @@
 		<a href="new.php" class="btn btn-primary btn-lg btn-block" role="button">Start</a>
 		<a href="session.php" class="btn btn-primary btn-lg btn-block" role="button">Results</a>
 		<a href="profile.php" class="btn btn-primary btn-lg btn-block" role="button">Profile</a>
+		<a href="settings.php" class="btn btn-primary btn-lg btn-block" role="button">Settings</a>
 		<a href="index.php?logout=true" class="btn btn-primary btn-lg btn-block" role="button">Log out</a>
 	</div>
 
