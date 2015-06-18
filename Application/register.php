@@ -111,7 +111,7 @@ else:
 		<button class="btn btn-primary btn-lg btn-block" type="submit">
 			Register
 		</button>
-		<a href="index.php" class="btn btn-default btn-lg btn-block">Terug</a>
+		<a href="index.php" class="btn btn-default btn-lg btn-block">Back</a>
 	</form><!-- /form -->
 </div><!-- /card-container -->
 <?php

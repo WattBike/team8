@@ -13,6 +13,7 @@ require_once(__ROOT__ . '/assets/include/header.php');
 ?>
 
     <div class="col-xs-12 col-md-8 col-md-offset-2">
+        <a class="btn btn-default" href="index.php">&larr; Back</a>
         <h1 align="center"> Profile </h1>
     </div>
     
