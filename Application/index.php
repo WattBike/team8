@@ -3,7 +3,7 @@ define('safeGuard', TRUE);
 define('__ROOT__', dirname(__FILE__));
 require_once (__ROOT__ . '/assets/classes/class.connect.php');
 $connection = new Connect();
-require_once (__ROOT__ . '/assets/include/header.php');
+//require_once (__ROOT__ . '/assets/include/header.php');
 
 if (key_exists("mail", $_SESSION)) {
 	if (isset($_GET['logout'])) {
