@@ -29,6 +29,9 @@ if (key_exists("mail", $_SESSION)) {
 } else {
 	$location = FALSE;
 }
-require_once (($location) ? "display.php" : "login.php");
-require_once (__ROOT__ . '/assets/include/footer.php');
+if($location){
+	$connection->redirect("display.php", 200);
+}else{
+	$connection->redirect("login.php", 200);
+}
 ?>
