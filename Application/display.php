@@ -4,11 +4,11 @@
     define('dbConnected', TRUE);
     define('__ROOT__', dirname(__FILE__));
     require_once(__ROOT__ . '/assets/classes/class.connect.php');
-    require_once(__ROOT__ . '/assets/include/header.php');
 	$connection = new Connect;
     if (!isset($_SESSION['mail']) && ($_SESSION['mail'] == "")):
         header('Location: index.php', 401);
     else:
+		require_once(__ROOT__ . '/assets/include/header.php');
 ?>
 <div class="col-xs-12 col-md-8 col-md-offset-2">
 	<h1 align="center"> Welcome </h1>
