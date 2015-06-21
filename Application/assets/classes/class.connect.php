@@ -201,5 +201,21 @@ class Connect {
 		return $result;
 	}
 
+	function update_user($update, $update_db) {
+		if (!$pass == $verification_pass) {
+			$status["statuscode"] = "Passwords do not match";
+		} else {
+			$db = new db;
+			$functions = new Functions();
+			// $pass = $functions -> hash_pass($mail, $pass);
+			// $res = $db -> mysqli_query("UPDATE `Member` SET '$update_db'='$update' where update_db='$_SESSION['mail']'");
+			// $res = $db -> query_8("UPDATE `Member` SET (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", TRUE, "ssssisdd", $mail, $pass, $first_name, $last_name, $age, $gender, $lenghth, $weight);
+			if ($res['result']) {
+				$_SESSION['mail'] = $mail;
+				$_SESSION['first_name'] = $first_name;
+			}
+		}
+		return $res['result'];
+	}
 }
 ?>
