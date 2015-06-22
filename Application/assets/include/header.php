@@ -54,7 +54,8 @@ require_once (__ROOT__ . '/assets/classes/class.functions.php');
 	                    <ul class="nav navbar-nav">
 	                        <li><a href="display.php">Home</a></li>
 	                        <li><a href="new.php">Start new</a></li>
-	                        <li><a href="session.php">Results</a></li>
+	                        <li><a href="session.php">Results table</a></li>
+	                        <li><a href="graph.php">Results graph</a></li>
 	                        
 	                    </ul>
 	                    <ul class="nav navbar-nav navbar-right">

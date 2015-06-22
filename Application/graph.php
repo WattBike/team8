@@ -12,7 +12,15 @@
 		$data = $connection -> graph_data(-1);
 ?>
 
-<canvas id="myChart" width="900" height="600" ></canvas>
+<div class="col-xs-12 col-md-8 col-md-offset-2">
+        <a class="btn btn-default" href="display.php">&larr; Back</a>
+        <h1 align="center"> Graph </h1>
+    </div>
+
+<div class="col-xs-12 col-md-8 col-md-offset-2">
+
+<canvas id="myChart" class="col-md-12" height="200"></canvas>
+</div>
 <?php require_once (__ROOT__ . '/assets/include/footer-tags.php');?>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script>

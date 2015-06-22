@@ -27,9 +27,9 @@ class Connect {
 	}
 
 	function verified_login($mail, $pass) {
+		$db = new db;
 		$functions = new Functions();
 		$pass = $functions -> hash_pass($mail, $pass);
-		$db = new db;
 		$res = $db -> query_2("SELECT `firstname`, `member_id` FROM `Member` WHERE `email_id`=? AND `password`=?", FALSE, "ss", $mail, $pass);
 		$logged_in = (count($res['result']) == 1);
 		if ($logged_in) {
@@ -220,13 +220,16 @@ class Connect {
 	function update_user($firstname, $lastname, $age, $gender, $length, $weight, $password, $passwordNew, $verificationPassword) {
 		$user = $this->user();
 		$db = new db;
-		$functions = new functions;
+		$functions = new Functions;
 		$results =FALSE;
 		if($password==""){
 			$db->query_7("UPDATE `Member` SET `firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"ssisiii", $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
 			$results = TRUE;
 		}else{
-			if($this->verified_login($_SESSION['mail'], $password)){
+			$functions = new Functions();
+			$pass = $functions -> hash_pass($_SESSION['mail'], $password);
+			echo $pass."\n".$user['password'];
+			if($pass==$user['password']){
 				if($passwordNew == $verificationPassword){
 					$verification_pass = $functions-> hash_pass($_SESSION['mail'], passwordNew);			
 					$db->query_8("UPDATE `Member` SET `password`=?,`firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"sssisiii", $verification_pass, $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
