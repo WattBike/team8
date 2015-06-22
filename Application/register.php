@@ -18,13 +18,18 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
         $_POST['weight']
     );
     if (!$registration) {
-        echo "Registration Failed <a href='register.php'>back</a>";
+        $_SESSION['status'] = "Registration Failed!";
+        $connection->redirect("register.php", 401);
     } else {
-        echo "Registration Succeeded! <a href='index.php'>continue</a>";
+        $_SESSION['status'] = "Registration Succeeded!";
+        $connection->redirect("status.php", 302);
     }
 else:
 ?>
 <div class="col-md-12 well">
+    <?php if(isset($_SESSION['status'])):?>
+        <div class="alert alert-success"><?php echo $_SESSION['status'];?></div>
+	<?php unset($_SESSION['status']);endif;?>
 	<img id="profile-img" class="img-circle img-responsive center-block" src="https://randomuser.me/api/portraits/lego/2.jpg" width="96"/>
 	<form  method="post" class="form-horizontal">
 		<div class="form-group ">
