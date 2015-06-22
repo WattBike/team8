@@ -132,6 +132,11 @@ class Connect {
 
 		$obj = new stdClass();
 		if ($logged_in) {
+			$user = $this -> user();
+			$test = $db -> query_1("SELECT `session_nr` FROM `Training_session` WHERE `member_id`=?", FALSE, "s", $user['member_id']);
+			if (count($test['result']) == 0){
+				$this -> new_training(0);
+			}
 			$obj -> status = "login";
 			$res = $db -> query_1("SELECT `member_id`,`first_active` FROM `Member_devices` WHERE `UUID`=?;", FALSE, "s", $UUID);
 			if (array_key_exists(0, $res['result'])) {
@@ -200,22 +205,40 @@ class Connect {
 		$result['time']=$time;
 		return $result;
 	}
-
-	function update_user($update, $update_db) {
-		if (!$pass == $verification_pass) {
-			$status["statuscode"] = "Passwords do not match";
-		} else {
-			$db = new db;
-			$functions = new Functions();
-			// $pass = $functions -> hash_pass($mail, $pass);
-			// $res = $db -> mysqli_query("UPDATE `Member` SET '$update_db'='$update' where update_db='$_SESSION['mail']'");
-			// $res = $db -> query_8("UPDATE `Member` SET (`email_id`, `password`, `firstname`, `lastname`, `age`, `gender`, `length`, `weight`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", TRUE, "ssssisdd", $mail, $pass, $first_name, $last_name, $age, $gender, $lenghth, $weight);
-			if ($res['result']) {
-				$_SESSION['mail'] = $mail;
-				$_SESSION['first_name'] = $first_name;
+    
+    function user(){
+    	$db = new db;
+        $member_res = $db -> query_1("SELECT * FROM `Member` WHERE `email_id`=?", FALSE, "s", $_SESSION['mail']);
+		$logged_in = (count($member_res['result']) == 1);
+        if($logged_in){
+            return $member_res['result'][0];
+        }
+        else{ return false;}
+    }
+    
+    
+	function update_user($firstname, $lastname, $age, $gender, $length, $weight, $password, $passwordNew, $verificationPassword) {
+		$user = $this->user();
+		$db = new db;
+		$functions = new functions;
+		$results =FALSE;
+		if($password==""){
+			$db->query_7("UPDATE `Member` SET `firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"ssisiii", $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
+			$results = TRUE;
+		}else{
+			if($this->verified_login($_SESSION['mail'], $password)){
+				if($passwordNew == $verificationPassword){
+					$verification_pass = $functions-> hash_pass($_SESSION['mail'], passwordNew);			
+					$db->query_8("UPDATE `Member` SET `password`=?,`firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"sssisiii", $verification_pass, $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
+					$results = TRUE;	
+				} else {
+					$_SESSION["status"] = "New passwords do not match";
+				}
+			}else{
+				$_SESSION["status"] = "Password doesn't match previous password";
 			}
 		}
-		return $res['result'];
+		return $results;
 	}
 }
 ?>
