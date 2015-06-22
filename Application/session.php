@@ -27,11 +27,11 @@
         </select>    
     </form>
     <?php
-    	$session_result = $_POST['session_select'];
-    	echo $session_result;
-        $result_explode = explode('|', $session_result);
-        echo "DBsession: ". $result_explode[0]."<br />";
-        echo "newSession: ". $result_explode[1]."<br />";
+    	// $session_result = $_POST['session_select'];
+    	// echo $session_result;
+        // $result_explode = explode('|', $session_result);
+        // echo "DBsession: ". $result_explode[0]."<br />";
+        // echo "newSession: ". $result_explode[1]."<br />";
     ?>
 	<table class="table">
 		<thead>

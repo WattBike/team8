@@ -6,7 +6,7 @@ require_once(__ROOT__ . '/assets/classes/class.connect.php');
 require_once(__ROOT__ . '/assets/include/header.php');
 $connection = new Connect();
 if (isset($_POST['email']) && ($_POST['email'] != "")):
-    $registration = $connection->register_user(
+    $update = $connection->register_user(
         $_POST['email'],
         $_POST['password'],
         $_POST['verificationPassword'],
@@ -17,7 +17,7 @@ if (isset($_POST['email']) && ($_POST['email'] != "")):
         $_POST['length'],
         $_POST['weight']
     );
-    if (!$registration) {
+    if (!$update) {
         $_SESSION['status'] = "Registration Failed!";
         $connection->redirect("register.php", 401);
     } else {
