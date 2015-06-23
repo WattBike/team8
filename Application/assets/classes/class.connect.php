@@ -1,17 +1,24 @@
 <?php
+/**
+ * Runs advanced calculations before making database calls. Used to keep the HTML infused pages clean.
+ */
 if (!defined('safeGuard')) {
 	die('Direct access not permitted');
 }
 session_start();
 require_once (__ROOT__ . '/assets/classes/class.functions.php');
 require_once (__ROOT__ . '/assets/classes/class.db.php');
-/**
- * Connects the DB to the application
- */
 class Connect {
+	/**
+	 * Stores the ID on login. For safekeeping
+	 * @var int
+	 */
 	var $ID;
 	/**
 	 * Redirects the user to a page.
+	 * @param string $extra the page you're requesting. Defaults to index.php
+	 * @param int $status the HTTP status to pass. Defaults to 401
+	 * @see url()
 	 */
 	function redirect($extra = "index.php", $status = 401) {
 		$functions = new Functions();
@@ -21,11 +28,19 @@ class Connect {
 		die();
 	}
 
+	/**
+	 * Get the current URL
+	 * @return string the current URL
+	 */
 	function getUrl() {
 		$functions = new Functions();
 		return $functions -> url();
 	}
 
+	/**
+	 * Log the user in
+	 * @return boolean wether the login succeeded.
+	 */
 	function verified_login($mail, $pass) {
 		$db = new db;
 		$functions = new Functions();
@@ -41,6 +56,19 @@ class Connect {
 		return $logged_in;
 	}
 
+	/**
+	 * Register a user to the backend
+	 * @param string email
+	 * @param string password
+	 * @param string verification password
+	 * @param string Firstname
+	 * @param string Lastname
+	 * @param int age
+	 * @param string gender
+	 * @param int length
+	 * @param int weight
+	 * @return Array the result of the insert query
+	 */
 	function register_user($mail, $pass, $verification_pass, $first_name, $last_name, $age, $gender, $lenghth, $weight) {
 		if (!$pass == $verification_pass) {
 			$status["statuscode"] = "Passwords do not match";
@@ -57,6 +85,12 @@ class Connect {
 		return $res['result'];
 	}
 
+	/**
+	 * Get the users session(s)
+	 * @param int The session ID to recall. Defaults to -1 which is all sessions (as do all negative numbers)
+	 * @return Array the list of session records.
+	 * @see session.php
+	 */
 	function get_user_session($session = -1) {
 		$db = new db;
 		$resultset = array();
@@ -84,6 +118,11 @@ class Connect {
 		return $resultset;
 	}
 
+	/**
+	 * Get an array of all the sessions a user ever did
+	 * @return Array List of sessions a user did.
+	 * @see session.php
+	 */
 	function get_total_session() {
 		$db = new db;
 		$resultset = array();
@@ -100,6 +139,13 @@ class Connect {
 		return $resultset;
 	}
 
+	/**
+	 * Write the heartrate to the databases last session.
+	 * @param Obj The heartrate you measured.
+	 * This is only used in the JSON backend and requires a registered device UUID as a property as well as a BPM value.
+	 * @return Obj Object with property status to be used with the JSON backend
+	 * @see rest.php
+	 */
 	function write_heartbeat($heartbeat) {
 		$temp_session = 0;
 		if (property_exists($heartbeat, "BPM") && property_exists($heartbeat, "UUID")) {
@@ -125,6 +171,14 @@ class Connect {
 		}
 	}
 
+	/**
+	 * Register a device to an existing backend account.
+	 *
+	 * @param string email for existing account
+	 * @param string password for existing account
+	 * @param string UUID for a device you want to register with this account.
+	 * @return Obj Object with at least the status property to be displayed on the apps login page through the JSON backend. Although failure often has a desc property with more info.
+	 */
 	function register_device($email, $pass, $UUID) {
 		$db = new db;
 		$logged_in = $this -> verified_login($email, $pass);
@@ -134,7 +188,7 @@ class Connect {
 		if ($logged_in) {
 			$user = $this -> user();
 			$test = $db -> query_1("SELECT `session_nr` FROM `Training_session` WHERE `member_id`=?", FALSE, "s", $user['member_id']);
-			if (count($test['result']) == 0){
+			if (count($test['result']) == 0) {
 				$this -> new_training(0);
 			}
 			$obj -> status = "login";
@@ -161,7 +215,11 @@ class Connect {
 	}
 
 	/**
-	 *
+	 * Log the device out.
+	 * @param string the first time the device was active (as a verification)
+	 * @param string the device UUID
+	 * @return string "attempted" to display we tried.
+	 * TODO write a verification for the deletion attempt.
 	 */
 	function unregister_device($first_active, $UUID) {
 		$db = new db;
@@ -171,12 +229,21 @@ class Connect {
 		return $obj;
 	}
 
+	/**
+	 * Get all training types
+	 * @return Array all available training types
+	 */
 	function read_trainings_types() {
 		$db = new db;
 		$res = $db -> query_0("SELECT * FROM `Training_type`;", FALSE);
 		return $res['result'];
 	}
 
+	/**
+	 * Start a new training
+	 * @param int trainingtype as seen in the 'Training_type' database.
+	 * @return boolean Whether we succeeded in creating a new trainingssession
+	 */
 	function new_training($type) {
 		$db = new db;
 		$result = FALSE;
@@ -192,56 +259,81 @@ class Connect {
 		return $result;
 	}
 
+	/**
+	 * Get the data in a format fitting for a chart.js database.
+	 * @param int session to graph
+	 * @return Array a 2D-Array. An element bpm which is an Array of BPM data and an element time which is is an Array of timestamps of the BPM data.
+	 * @see graph.php
+	 * TODO: make this an object instead
+	 */
 	function graph_data($session = -1) {
-		$array = $this->get_user_session($session);
+		$array = $this -> get_user_session($session);
 		$bpm = array();
 		$time = array();
 		var_dump(count($array));
-		for ($i=0; $i < count($array); $i++) { 
+		for ($i = 0; $i < count($array); $i++) {
 			$bpm[$i] = $array[$i]['bpm'];
 			$time[$i] = $array[$i]['time'];
 		}
-		$result['bpm']=$bpm;
-		$result['time']=$time;
+		$result['bpm'] = $bpm;
+		$result['time'] = $time;
 		return $result;
 	}
-    
-    function user(){
-    	$db = new db;
-        $member_res = $db -> query_1("SELECT * FROM `Member` WHERE `email_id`=?", FALSE, "s", $_SESSION['mail']);
+
+	/**
+	 * Get all userdata of the logged in user.
+	 * @return Array an assoc array with the data available in the DB for the user in the current session. Or FALSE if we couldn't find one.
+	 */
+	function user() {
+		$db = new db;
+		$member_res = $db -> query_1("SELECT * FROM `Member` WHERE `email_id`=?", FALSE, "s", $_SESSION['mail']);
 		$logged_in = (count($member_res['result']) == 1);
-        if($logged_in){
-            return $member_res['result'][0];
-        }
-        else{ return false;}
-    }
-    
-    
+		if ($logged_in) {
+			return $member_res['result'][0];
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Update the current users data
+	 * @param string Firstname
+	 * @param string Lastname
+	 * @param int age
+	 * @param string gender
+	 * @param int length
+	 * @param int weight
+	 * @param string current password
+	 * @param string new password
+	 * @param string new password a second time for verification.
+	 * @return boolean wether or not the update succeeded.
+	 */
 	function update_user($firstname, $lastname, $age, $gender, $length, $weight, $password, $passwordNew, $verificationPassword) {
-		$user = $this->user();
+		$user = $this -> user();
 		$db = new db;
 		$functions = new Functions;
-		$results =FALSE;
-		if($password==""){
-			$db->query_7("UPDATE `Member` SET `firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"ssisiii", $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
+		$results = FALSE;
+		if ($password == "") {
+			$db -> query_7("UPDATE `Member` SET `firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE, "ssisiii", $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id']);
 			$results = TRUE;
-		}else{
+		} else {
 			$functions = new Functions();
 			$pass = $functions -> hash_pass($_SESSION['mail'], $password);
-			echo $pass."\n".$user['password'];
-			if($pass==$user['password']){
-				if($passwordNew == $verificationPassword){
-					$verification_pass = $functions-> hash_pass($_SESSION['mail'], passwordNew);			
-					$db->query_8("UPDATE `Member` SET `password`=?,`firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE,"sssisiii", $verification_pass, $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id'] );
-					$results = TRUE;	
+			echo $pass . "\n" . $user['password'];
+			if ($pass == $user['password']) {
+				if ($passwordNew == $verificationPassword) {
+					$verification_pass = $functions -> hash_pass($_SESSION['mail'], passwordNew);
+					$db -> query_8("UPDATE `Member` SET `password`=?,`firstname`=?,`lastname`=?,`age`=?,`gender`=?,`length`=?,`weight`=? WHERE `member_id`=?", TRUE, "sssisiii", $verification_pass, $firstname, $lastname, $age, $gender, $length, $weight, $user['member_id']);
+					$results = TRUE;
 				} else {
 					$_SESSION["status"] = "New passwords do not match";
 				}
-			}else{
+			} else {
 				$_SESSION["status"] = "Password doesn't match previous password";
 			}
 		}
 		return $results;
 	}
+
 }
 ?>

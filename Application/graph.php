@@ -1,7 +1,6 @@
 <?php
     global $base_url;
     define('safeGuard', TRUE);
-    define('dbConnected', TRUE);
     define('__ROOT__', dirname(__FILE__));
     require_once(__ROOT__ . '/assets/classes/class.connect.php');
 	$connection = new Connect;
