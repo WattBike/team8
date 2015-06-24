@@ -14,6 +14,8 @@ class Connect {
 	 * @var int
 	 */
 	var $ID;
+	
+	
 	/**
 	 * Redirects the user to a page.
 	 * @param string $extra the page you're requesting. Defaults to index.php
@@ -39,7 +41,7 @@ class Connect {
 
 	/**
 	 * Log the user in
-	 * @return boolean wether the login succeeded.
+	 * @return boolean whether the login succeeded.
 	 */
 	function verified_login($mail, $pass) {
 		$db = new db;
